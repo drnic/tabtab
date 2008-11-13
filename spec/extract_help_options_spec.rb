@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe EzyAutoCompletions::ExtractHelpOptions, "extract" do
+describe EzyAutoCompletions::ExtractHelpOptions, "extract verbose help output" do
   before(:each) do
     options_str = <<-EOS.gsub(/^    /, '')
     Options are ...
@@ -33,6 +33,20 @@ describe EzyAutoCompletions::ExtractHelpOptions, "extract" do
                     %w[--execute-print --freeze --help --no-system --nosystem --prereqs --rakelib --ruby]
     short_options = %w[ -C -D -G -H -P -b -d -e -f -h -p -r]
     expected      = long_options + short_options
+    @options.extract.should == expected
+  end
+end
+
+describe EzyAutoCompletions::ExtractHelpOptions, "extract short help output" do
+  before(:each) do
+    options_str = <<-EOS.gsub(/^    /, '')
+    complete: usage: complete [-abcdefgjksuv] [-pr] [-o option] [-A action] [-G globpat] [-W wordlist] [-P prefix] [-S suffix] [-X filterpat] [-F function] [-C command] [name ...]
+    EOS
+    @options = EzyAutoCompletions::ExtractHelpOptions.new(options_str)
+  end
+  
+  it "should find all options" do
+    expected = "abcdefgjksuvproAGWPSXFC".split.sort.map { |letter| "-#{letter}"}
     @options.extract.should == expected
   end
 end
