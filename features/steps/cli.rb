@@ -3,7 +3,7 @@ Given %r{^a .ezy_auto_completions.yml config file} do
   in_home_folder do
     config = { 
       'external' => { 
-        '-h' => %w[rails rake], 
+        '-h' => %w[rails test_app], 
         '-?' => [] 
       }
     }
