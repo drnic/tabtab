@@ -1,6 +1,6 @@
 = ezy_auto_completions
 
-* FIX (url)
+* http://github.com/drnic/ezy_auto_completions
 
 == DESCRIPTION:
 
@@ -20,13 +20,18 @@ FIX (describe your package)
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* sudo gem install ezy_auto_completions
+
+== SPONSOR
+
+* Mocra - the premier iPhone/Rails consultancy
+* http://mocra.com
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2008 FIXME full name
+Copyright (c) 2008 Dr Nic Williams (http://drnicwilliams.com)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
