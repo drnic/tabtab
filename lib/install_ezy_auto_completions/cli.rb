@@ -1,42 +1,45 @@
-require 'optparse'
+require 'yaml'
 
-module InstallEzyAutoCompletion
+module InstallEzyAutoCompletions
   class CLI
     def self.execute(stdout, arguments=[])
-
-      # NOTE: the option -p/--path= is given as an example, and should be replaced in your application.
-
-      options = {
-        :path     => '~'
-      }
-      mandatory_options = %w(  )
-
-      parser = OptionParser.new do |opts|
-        opts.banner = <<-BANNER.gsub(/^          /,'')
-          This application is wonderful because...
-
-          Usage: #{File.basename($0)} [options]
-
-          Options are:
-        BANNER
-        opts.separator ""
-        opts.on("-p", "--path=PATH", String,
-                "This is a sample message.",
-                "For multiple lines, add more strings.",
-                "Default: ~") { |arg| options[:path] = arg }
-        opts.on("-h", "--help",
-                "Show this help message.") { stdout.puts opts; exit }
-        opts.parse!(arguments)
-
-        if mandatory_options && mandatory_options.find { |option| options[option.to_sym].nil? }
-          stdout.puts opts; exit
-        end
+      self.new.execute(stdout, arguments)
+    end
+    
+    def execute(stdout, arguments=[])
+      config_file = File.join(home, '.ezy_auto_completions.yml')
+      usage unless File.exists?(config_file)
+      @config = YAML.load(File.read(config_file))
+      install_externals
+    end
+   
+    def install_externals
+      externals = @config['external'] || @config['externals']
+      for help_arg in externals.keys
+        app_list = externals[help_arg]
+        # TODO extract into BashCompletion.install ...
+        # TODO support non-Bash shells
+        app_list.each do |app|
+          complete = "complete -o default -C ezy_auto_completions #{app}"
+          puts sh(complete)
+        end unless app_list.nil? || app_list.empty?
       end
-
-      path = options[:path]
-
-      # do stuff
-      puts "To update this executable, look in lib/install_ezy_auto_completions/cli.rb"      
+    end
+    
+    def home
+      ENV["HOME"] || ENV["HOMEPATH"] || File::expand_path("~")
+    end
+    
+    def usage
+      puts <<-EOS.gsub(/^      /, '')
+      USAGE: create a file ~/.ezy_auto_completions.yml
+      EOS
+      exit 1
+    end
+    
+    def sh(cmd)
+      puts cmd
+      Kernel.system(cmd)
     end
   end
 end

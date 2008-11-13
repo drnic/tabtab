@@ -1,5 +1,3 @@
-require File.dirname(__FILE__) + "/../../lib/ezy_auto_completions"
-
 gem 'cucumber'
 require 'cucumber'
 gem 'rspec'
@@ -12,3 +10,8 @@ Spec::Runner.configure do |config|
 end
 
 require 'yaml'
+
+require File.dirname(__FILE__) + "/../../lib/ezy_auto_completions"
+require File.dirname(__FILE__) + "/../../lib/install_ezy_auto_completions/cli"
+
+

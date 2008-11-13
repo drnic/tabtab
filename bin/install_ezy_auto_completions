@@ -7,4 +7,4 @@ require File.expand_path(File.dirname(__FILE__) + "/../lib/ezy_auto_completions"
 
 require "install_ezy_auto_completions/cli"
 
-InstallEzyAutoCompletion::CLI.execute(STDOUT, ARGV)
+InstallEzyAutoCompletions::CLI.execute(STDOUT, ARGV)
