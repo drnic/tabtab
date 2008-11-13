@@ -22,16 +22,16 @@ describe EzyAutoCompletions::ExtractHelpOptions, "extract" do
                                          Default: false
 
      Options:
-         -b=BIN_NAME[,BIN_NAME2]          Sets up executable scripts in the bin folder.
-             --bin-name                   Default: none
+         -b=BIN_NAME[,BIN_NAME2]          Should --ignore inline option
+             --bin-name                   Default: -x
     EOS
     @options = EzyAutoCompletions::ExtractHelpOptions.new(options_str)
   end
   
   it "should find all options" do
     long_options  = %w[--bin-name --classic-namespace --database --describe --execute] +
-                    %w[--execute-print --freeze --prereqs --rakelib --ruby]
-    short_options = %w[-b -d -e -f -p -r -C -D -P]
+                    %w[--execute-print --freeze --help --no-system --nosystem --prereqs --rakelib --ruby]
+    short_options = %w[ -C -D -G -H -P -b -d -e -f -h -p -r]
     expected      = long_options + short_options
     @options.extract.should == expected
   end
