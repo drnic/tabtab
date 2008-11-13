@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/../../lib/ezy_bash_completions"
+require File.dirname(__FILE__) + "/../../lib/ezy_auto_completions"
 
 gem 'cucumber'
 require 'cucumber'

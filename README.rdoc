@@ -1,4 +1,4 @@
-= ezy_bash_completions
+= ezy_auto_completions
 
 * FIX (url)
 

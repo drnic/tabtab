@@ -6,11 +6,11 @@ Rakefile
 features/development.feature
 features/steps/common.rb
 features/steps/env.rb
-lib/ezy_bash_completions.rb
+lib/ezy_auto_completions.rb
 script/console
 script/destroy
 script/generate
-spec/ezy_bash_completions_spec.rb
+spec/ezy_auto_completions_spec.rb
 spec/spec.opts
 spec/spec_helper.rb
 tasks/rspec.rake
