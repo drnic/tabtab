@@ -9,7 +9,7 @@ describe EzyAutoCompletion::CLI, "execute" do
     @stdout = @stdout_io.read
   end
   
-  it "should do something" do
-    @stdout.should_not =~ /To update this executable/
-  end
+  it "should run target app with -h to determine options"
+  
+  it "should extract options and print them on separate lines"
 end

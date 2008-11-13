@@ -3,13 +3,13 @@ require 'install_ezy_auto_completions/cli'
 
 describe InstallEzyAutoCompletions::CLI, "execute" do
   before(:each) do
+    @cli = InstallEzyAutoCompletions::CLI.new
+    @cli.expects(:config).returns({"external" => {"-h" => %w[test_app]}}).times(2)
     @stdout_io = StringIO.new
-    InstallEzyAutoCompletions::CLI.execute(@stdout_io, [])
+    @cli.execute(@stdout_io, [])
     @stdout_io.rewind
     @stdout = @stdout_io.read
   end
   
-  it "should do something" do
-    @stdout.should_not =~ /To update this executable/
-  end
+  it "should do run the local 'complete' in-built command"
 end

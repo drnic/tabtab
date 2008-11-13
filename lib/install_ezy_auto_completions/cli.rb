@@ -8,13 +8,12 @@ module InstallEzyAutoCompletions
     
     def execute(stdout, arguments=[])
       config_file = File.join(home, '.ezy_auto_completions.yml')
-      usage unless File.exists?(config_file)
-      @config = YAML.load(File.read(config_file))
+      usage unless config
       install_externals
     end
    
     def install_externals
-      externals = @config['external'] || @config['externals']
+      externals = config['external'] || config['externals']
       for help_arg in externals.keys
         app_list = externals[help_arg]
         # TODO extract into BashCompletion.install ...
@@ -34,6 +33,13 @@ module InstallEzyAutoCompletions
       USAGE: create a file ~/.ezy_auto_completions.yml
       EOS
       exit 1
+    end
+    
+    def config
+      @config ||= begin
+        return nil unless File.exists?(config_file)
+        YAML.load(File.read(config_file))
+      end
     end
   end
 end
