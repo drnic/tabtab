@@ -20,8 +20,7 @@ module InstallEzyAutoCompletions
         # TODO extract into BashCompletion.install ...
         # TODO support non-Bash shells
         app_list.each do |app|
-          complete = "complete -o default -C ezy_auto_completions #{app}"
-          puts sh(complete)
+          system "complete -o default -C ezy_auto_completions #{app}"
         end unless app_list.nil? || app_list.empty?
       end
     end
@@ -35,11 +34,6 @@ module InstallEzyAutoCompletions
       USAGE: create a file ~/.ezy_auto_completions.yml
       EOS
       exit 1
-    end
-    
-    def sh(cmd)
-      puts cmd
-      Kernel.system(cmd)
     end
   end
 end
