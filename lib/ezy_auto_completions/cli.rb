@@ -1,42 +1,38 @@
 require 'optparse'
+require 'ezy_auto_completions/local_config'
 
-module EzyAutoCompletion
+module EzyAutoCompletions
   class CLI
+    include EzyAutoCompletions::LocalConfig
+
     def self.execute(stdout, arguments=[])
-
-      # NOTE: the option -p/--path= is given as an example, and should be replaced in your application.
-
-      options = {
-        :path     => '~'
-      }
-      mandatory_options = %w(  )
-
-      parser = OptionParser.new do |opts|
-        opts.banner = <<-BANNER.gsub(/^          /,'')
-          This application is wonderful because...
-
-          Usage: #{File.basename($0)} [options]
-
-          Options are:
-        BANNER
-        opts.separator ""
-        opts.on("-p", "--path=PATH", String,
-                "This is a sample message.",
-                "For multiple lines, add more strings.",
-                "Default: ~") { |arg| options[:path] = arg }
-        opts.on("-h", "--help",
-                "Show this help message.") { stdout.puts opts; exit }
-        opts.parse!(arguments)
-
-        if mandatory_options && mandatory_options.find { |option| options[option.to_sym].nil? }
-          stdout.puts opts; exit
-        end
-      end
-
-      path = options[:path]
-
-      # do stuff
-      puts "To update this executable, look in lib/ezy_auto_completions/cli.rb"      
+      self.new.execute(stdout, arguments)
+    end
+    
+    def execute(stdout, arguments=[])
+      usage unless config # TODO not fatal - try --auto-completion-script option?
+      app, *args = arguments
+      options_flag = externals.find { |flag, app_list| app_list.include?(app) }
+      usage if options_flag.nil?
+      options_flag = options_flag.first
+      external_options(app, options_flag).starts_with(args.first)
+    end
+    
+    def usage
+      puts <<-EOS.gsub(/^      /, '')
+      NOTE: Do not execute this application directly. It is to be called via
+      your shell's completion mechanism, e.g. bash's complete command.
+      EOS
+      exit 1
+    end
+    
+    def externals
+      config["external"] || config["externals"]
+    end
+    
+    def external_options(app, options_flag)
+      options_str = `#{app} #{options_str}`
+      EzyAutoCompletions::ExtractHelpOptions.new(options_str)
     end
   end
 end

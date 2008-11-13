@@ -4,7 +4,7 @@ require 'install_ezy_auto_completions/cli'
 describe InstallEzyAutoCompletions::CLI, "execute" do
   before(:each) do
     @cli = InstallEzyAutoCompletions::CLI.new
-    @cli.expects(:config).returns({"external" => {"-h" => %w[test_app]}}).times(2)
+    @cli.expects(:config).returns({"external" => {"-h" => %w[test_app]}}).at_least(2)
     @stdout_io = StringIO.new
     @cli.execute(@stdout_io, [])
     @stdout_io.rewind

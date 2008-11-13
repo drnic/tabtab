@@ -1,13 +1,15 @@
 require 'yaml'
+require 'ezy_auto_completions/local_config'
 
 module InstallEzyAutoCompletions
   class CLI
+    include EzyAutoCompletions::LocalConfig
+    
     def self.execute(stdout, arguments=[])
       self.new.execute(stdout, arguments)
     end
     
     def execute(stdout, arguments=[])
-      config_file = File.join(home, '.ezy_auto_completions.yml')
       usage unless config
       install_externals
     end
@@ -35,11 +37,5 @@ module InstallEzyAutoCompletions
       exit 1
     end
     
-    def config
-      @config ||= begin
-        return nil unless File.exists?(config_file)
-        YAML.load(File.read(config_file))
-      end
-    end
   end
 end
