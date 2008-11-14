@@ -12,12 +12,14 @@ FIX (describe your package)
 
 == SYNOPSIS:
 
+Create a ~/.ezy_auto_completions.yml file.
+
+Run `install_ezy_auto_completions`
+
+
 In your .profile (currently for bash, but zsh etc coming soon/need help) add:
 
-    install_ezy_auto_completions
     source ~/.ezy_auto_completions.sh
-
-
 
 == REQUIREMENTS:
 
