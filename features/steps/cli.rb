@@ -13,16 +13,9 @@ Given %r{^a .ezy_auto_completions.yml config file} do
   end
 end
 
-Given %r{^expecting bash completions for applications: (.*)$} do |app_list|
-  self.class.send :include, Mocha::Standalone
-  mocha_setup
-  # TODO - how to enable expects so it captures stuff??????
-  
-  app_list.split(/,\s*/).each do |app|
-    InstallEzyAutoCompletions::CLI.any_instance.expects(:sh).with("complete -o default -C ezy_auto_completions #{app}").returns(true)
+Then %r{^bash completions are ready to be installed for applications: (.*)$} do |app_list|
+  contents = File.read(".ezy_auto_completion.sh")
+  app_list.each do |app|
+    contents.should =~ /complete -o default -C ezy_auto_completions #{app}/
   end
 end
-
-# Then %r{^bash completions are installed for each application$} do
-#   mocha_verify
-# end

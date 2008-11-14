@@ -15,8 +15,5 @@ describe EzyAutoCompletions::CLI, "execute for all options" do
     @stdout = @stdout_io.read
   end
   
-  it "should run target app with -h to determine options" do
-  end
-  
-  it "should extract options and print them on separate lines"
+  it "should fucking do something here... brain... doing some thinking please"
 end

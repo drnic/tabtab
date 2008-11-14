@@ -73,20 +73,24 @@ When %r{^task 'rake (.*)' is invoked$} do |task|
   end
 end
 
-Then %r{^folder '(.*)' is created} do |folder|
-  in_project_folder do
-    File.exists?(folder).should be_true
+Then %r{^home folder '(.*)' is created} do |folder|
+  in_home_folder do
+    File.should be_exists(folder)
   end
 end
 
-Then %r{^file '(.*)' (is|is not) created} do |file, is|
-  in_project_folder do
-    File.exists?(file).should(is == 'is' ? be_true : be_false)
+Then %r{^home file '(.*)' (is|is not) created} do |file, is|
+  in_home_folder do
+    if is == 'is'
+      File.should be_exists(file)
+    else
+      File.should_not be_exists(file)
+    end
   end
 end
 
-Then %r{^file with name matching '(.*)' is created} do |pattern|
-  in_project_folder do
+Then %r{^home file with name matching '(.*)' is created} do |pattern|
+  in_home_folder do
     Dir[pattern].should_not be_empty
   end
 end

@@ -5,9 +5,9 @@ Feature: Autocompletions for any 3rd-party application's options
   
   Scenario: Install configured list of applications into bash completions
     Given a .ezy_auto_completions.yml config file
-    And expecting bash completions for applications: rails, test_app
     When run local executable 'install_ezy_auto_completions' with arguments ''
-    Then bash completions are installed for each application
+    Then home file '.ezy_auto_completions.sh' is created
+    Then bash completions are ready to be installed for applications: rails, test_app
   
   Scenario: Activate auto-completions for app, determine options and return all
     Given a .ezy_auto_completions.yml config file

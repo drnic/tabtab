@@ -12,7 +12,12 @@ FIX (describe your package)
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+In your .profile (currently for bash, but zsh etc coming soon/need help) add:
+
+    install_ezy_auto_completions
+    source ~/.ezy_auto_completions.sh
+
+
 
 == REQUIREMENTS:
 

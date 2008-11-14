@@ -1,6 +1,8 @@
 require 'yaml'
 require 'ezy_auto_completions/local_config'
 
+# TODO extract into BashCompletion.install ...
+# TODO support non-Bash shells
 module InstallEzyAutoCompletions
   class CLI
     include EzyAutoCompletions::LocalConfig
@@ -11,18 +13,18 @@ module InstallEzyAutoCompletions
     
     def execute(stdout, arguments=[])
       usage unless config
-      install_externals
+      @to_file = File.open(File.join(home, ".ezy_auto_completions.sh"), "w")
+      self.install_externals
+      @to_file.close
     end
    
     def install_externals
       externals = config['external'] || config['externals']
       for help_arg in externals.keys
         app_list = externals[help_arg]
-        # TODO extract into BashCompletion.install ...
-        # TODO support non-Bash shells
         app_list.each do |app|
-          system "complete -o default -C ezy_auto_completions #{app}"
-        end unless app_list.nil? || app_list.empty?
+          @to_file << "complete -o default -C ezy_auto_completions #{app}"
+        end unless app_list.nil?
       end
     end
     
