@@ -12,19 +12,23 @@ describe EzyAutoCompletions::Definition::Root, "with flags and commands can retu
         end
       end
       c.flags :some_flag, :s
+      c.flag :flag_and_value do
+        %w[xxx yyy zzz]
+      end
     end
+    @all_possibles = ['run', 'stop', '--some_flag', '-s', '--flag_and_value']
   end
   
   it "should return ['run', 'stop', '--some_flag', '-s'] as root-level completion options" do
-    @definitions.unfiltered_completions.should == ['run', 'stop', '--some_flag', '-s']
+    @definitions.unfiltered_completions.should == @all_possibles
   end
   
   it "should return ['run', 'stop', '--some_flag', '-s'] as root-level completion options unfiltered" do
-    @definitions.filtered_completions('').should == ['run', 'stop', '--some_flag', '-s']
+    @definitions.filtered_completions('').should == @all_possibles
   end
 
   it "should return ['--some_flag', '-s'] as root-level completion options filtered by '-'" do
-    @definitions.filtered_completions('-').should == ['--some_flag', '-s']
+    @definitions.filtered_completions('-').should == ['--some_flag', '-s', '--flag_and_value']
   end
 
 end
