@@ -2,9 +2,9 @@ module EzyAutoCompletions::Definition
   class Command < Base
     attr_reader :name, :description
     def initialize(definition, name, description, &block)
-      super description
       @name        = name.to_s
       @description = description
+      super description, &block
     end
 
     # Example usage:

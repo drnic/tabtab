@@ -3,14 +3,12 @@ module EzyAutoCompletions::Definition
     attr_reader :app_name
 
     def self.named(app_name, &block)
-      definition = self.new(app_name)
-      yield definition
-      definition
+      self.new(app_name, &block)
     end
 
-    def initialize(app_name)
-      super(nil)
+    def initialize(app_name, &block)
       @app_name = app_name
+      super(nil, &block)
     end
 
     # Determines if current token matches the app name

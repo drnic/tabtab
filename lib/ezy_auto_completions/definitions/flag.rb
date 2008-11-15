@@ -2,9 +2,9 @@ module EzyAutoCompletions::Definition
   class Flag < Base
     attr_reader :definition, :flags, :description
     def initialize(definition, flags, description, &block)
-      super description
       @flags       = flags.map { |flag| flag.to_s }
       @description = description
+      super definition, &block
     end
     
     # Determines if current token matches this command's flags

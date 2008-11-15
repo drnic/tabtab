@@ -1,9 +1,11 @@
 class EzyAutoCompletions::Definition::Base
-  attr_reader :parent, :contents
+  attr_reader :parent, :contents, :definition_block
   
-  def initialize(parent)
-    @parent   = parent
-    @contents = []
+  def initialize(parent, &block)
+    @parent           = parent
+    @contents         = []
+    @definition_block = block
+    yield_block
   end
   
   # Example usage:
@@ -49,9 +51,23 @@ class EzyAutoCompletions::Definition::Base
     current, *remainder = tokens
     return false unless matches_token?(current)
     return true if remainder.empty?
-    find_definition_by_token(current, remainder)
+    return false unless definition = find_definition_by_token(current, remainder)
+    definition.yield_block
+    definition
   end
   
+  def yield_block
+    if definition_block.nil?
+      return
+    elsif definition_block.arity == 0
+      definition_block.call
+    elsif definition_block.arity == 1
+      definition_block.call self
+    else
+      raise EzyAutoCompletions::Definition::InvalidDefinitionBlockArguments
+    end
+  end
+
   protected
   
   # To be implemented by subclasses.
