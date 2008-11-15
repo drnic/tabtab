@@ -12,7 +12,7 @@ module EzyAutoCompletions::Definition
     end
 
     # convert flags into --flag or -f based on length of value
-    def unfiltered_completions
+    def own_completions
       flags.map do |flag|
         flag.size > 1 ? "--#{flag}" : "-#{flag}"
       end

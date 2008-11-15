@@ -44,21 +44,27 @@ class EzyAutoCompletions::Definition::Base
   def command(name, description="", &block)
     contents << EzyAutoCompletions::Definition::Command.new(self, name, description, &block)
   end
-
-  def unfiltered_completions
-    @unfiltered_completions ||= unfiltered_completions_of_contents
+  
+  def [](token)
+    contents.find { |definition| definition.matches_token?(token) }
   end
   
-  def unfiltered_completions_of_contents
+  def filtered_completions(prefix)
+    completions_of_contents.grep(/^#{prefix}/)
+  end
+
+  def completions_of_contents
+    return yield_result_block if contents.empty?
     contents.inject([]) do |mem, definition|
-      mem << definition.unfiltered_completions
+      mem << definition.own_completions
       mem
     end.flatten
   end
 
-  def filtered_completions(prefix)
-    unfiltered_completions.grep(/^#{prefix}/)
+  def own_completions
+    []
   end
+  
   
   #
   # Test support
@@ -66,11 +72,12 @@ class EzyAutoCompletions::Definition::Base
   
   # Helper for test frameworks
   def autocompletable?(cmd_line_or_tokens)
+    return false if cmd_line_or_tokens.nil?
     tokens = cmd_line_or_tokens.is_a?(String) ? cmd_line_or_tokens.split(/\s/) : cmd_line_or_tokens
     current, *remainder = tokens
     return false unless matches_token?(current) # current cmd-line doesn't match this Definition
     return true if remainder.empty?
-    if definition = find_definition_by_token(current, remainder)
+    if definition = find_child_definition_by_token(current, remainder)
       return definition.autocompletable?(remainder)
     end
     yield_result_block
@@ -107,7 +114,7 @@ class EzyAutoCompletions::Definition::Base
     false
   end
 
-  def find_definition_by_token(cmd_line_token, remainder)
+  def find_child_definition_by_token(cmd_line_token, remainder=nil)
     contents.find do |definition|
       definition.autocompletable?(remainder)
     end

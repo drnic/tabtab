@@ -11,7 +11,7 @@ module EzyAutoCompletions::Definition
       :command
     end
     
-    def unfiltered_completions
+    def own_completions
       [name]
     end
 
