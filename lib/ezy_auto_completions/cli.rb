@@ -15,7 +15,7 @@ module EzyAutoCompletions
       @stdout = stdout
       usage unless @app_type = arguments.shift
       @app_name, @current, @previous = arguments
-      case @app_type.gsub!(/^-*/, '').to_sym
+      case @app_type.gsub(/^-*/, '').to_sym
       when :external
         process_external
       when :gem
@@ -38,19 +38,14 @@ module EzyAutoCompletions
     end
     
     def external_options(app, options_flag)
-      options_str = `#{app} #{options_flag}`
-      EzyAutoCompletions::Completions::External.new(options_str)
+      EzyAutoCompletions::Completions::External.new(app, options_flag)
     end
     
     #
     # Support for RubyGem-based apps (found in any gem path)
     #
     def process_gem
-      stdout.puts rubygems_completions.starts_with(current)
-    end
-    
-    def rubygems_completions
-      EzyAutoCompletions::Completions::Gem.new(app_name)
+      stdout.puts EzyAutoCompletions::Completions::Gem.new(app_name, current, previous).extract
     end
   end
 end

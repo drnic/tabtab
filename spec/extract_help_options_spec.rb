@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe EzyAutoCompletions::ExtractHelpOptions, "extract verbose help output" do
+describe EzyAutoCompletions::Completions::External, "extract verbose help output" do
   before(:each) do
     options_str = <<-EOS.gsub(/^    /, '')
     Options are ...
@@ -25,7 +25,7 @@ describe EzyAutoCompletions::ExtractHelpOptions, "extract verbose help output" d
          -b=BIN_NAME[,BIN_NAME2]          Should --ignore inline option
              --bin-name                   Default: -x
     EOS
-    @options = EzyAutoCompletions::ExtractHelpOptions.new(options_str)
+    @options = EzyAutoCompletions::Completions::External.new('app_name').extract(options_str)
   end
   
   it "should find all options" do
@@ -33,6 +33,6 @@ describe EzyAutoCompletions::ExtractHelpOptions, "extract verbose help output" d
                     %w[--execute-print --freeze --help --no-system --nosystem --prereqs --rakelib --ruby]
     short_options = %w[ -C -D -G -H -P -b -d -e -f -h -p -r]
     expected      = long_options + short_options
-    @options.extract.should == expected
+    @options.should == expected
   end
 end

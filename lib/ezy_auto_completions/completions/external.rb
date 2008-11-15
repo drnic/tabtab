@@ -1,13 +1,19 @@
 class EzyAutoCompletions::Completions::External
-  def initialize(options_str)
-    @options_str = options_str
+  def initialize(app_name, options_flag = '-h')
+    @app_name     = app_name
+    @options_flag = options_flag
+  end
+  
+  def options_str
+    @options_str ||= `#{@app_name} #{@options_flag}`
   end
   
   # Returns list of long and short options for an application's --help display
   # which was passed into initializer
-  def extract
+  def extract(_options_str = nil)
+    @options_str = _options_str if _options_str # hook for testing
     @extract ||= begin
-      lines_containing_options = @options_str.split(/\n/).grep(/^[\s\t]+-/)
+      lines_containing_options = options_str.split(/\n/).grep(/^[\s\t]+-/)
       all_options = lines_containing_options.inject([]) do |list, line|
         list + line.scan(/(?:^\s+|,\s)(-[\w-]+)/).flatten
       end
