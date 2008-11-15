@@ -36,17 +36,3 @@ describe EzyAutoCompletions::ExtractHelpOptions, "extract verbose help output" d
     @options.extract.should == expected
   end
 end
-
-describe EzyAutoCompletions::ExtractHelpOptions, "extract short help output" do
-  before(:each) do
-    options_str = <<-EOS.gsub(/^    /, '')
-    complete: usage: complete [-abcdefgjksuv] [-pr] [-o option] [-A action] [-G globpat] [-W wordlist] [-P prefix] [-S suffix] [-X filterpat] [-F function] [-C command] [name ...]
-    EOS
-    @options = EzyAutoCompletions::ExtractHelpOptions.new(options_str)
-  end
-  
-  it "should find all options" do
-    expected = "abcdefgjksuvproAGWPSXFC".split.sort.map { |letter| "-#{letter}"}
-    @options.extract.should == expected
-  end
-end
