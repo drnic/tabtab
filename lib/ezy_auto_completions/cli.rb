@@ -39,7 +39,7 @@ module EzyAutoCompletions
     
     def external_options(app, options_flag)
       options_str = `#{app} #{options_flag}`
-      EzyAutoCompletions::ExtractHelpOptions.new(options_str)
+      EzyAutoCompletions::Completions::External.new(options_str)
     end
     
     #
@@ -50,7 +50,7 @@ module EzyAutoCompletions
     end
     
     def rubygems_completions
-      EzyAutoCompletions::RubyGemCompletions.new(app_name)
+      EzyAutoCompletions::Completions::Gem.new(app_name)
     end
   end
 end
