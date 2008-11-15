@@ -32,19 +32,24 @@ describe EzyAutoCompletions::FrameworkTesting, "can be auto-completed with comma
   before(:each) do
     @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
       c.command :run do
-        %[aaaa bbbb cccc]
+        %w[aaaa bbbb cccc]
       end
       c.command :stop do |stop|
         stop.default do
-          %[aaaa bbbb cccc]
+          %w[aaaa bbbb cccc]
         end
       end
     end
   end
   
+  it "should allow 'myapp run'" do
+    'myapp run'.should be_autocompletable_from(@definitions)
+  end
+
   %w[run stop].each do |cmd|
     it "should allow 'myapp #{cmd} bbbb'" do
       "myapp #{cmd} bbbb".should be_autocompletable_from(@definitions)
     end
   end
+  
 end

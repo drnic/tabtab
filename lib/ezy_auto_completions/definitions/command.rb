@@ -19,8 +19,8 @@ module EzyAutoCompletions::Definition
     #   myapp this_command possible
     #   myapp this_command value
     #   myapp this_command following
-    def default(&block)
-
+    def default(description=nil, &block)
+      contents << EzyAutoCompletions::Definition::Default.new(description, &block)
     end
 
     # Determines if current token matches this command's name
