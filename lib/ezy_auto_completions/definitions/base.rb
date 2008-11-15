@@ -5,7 +5,7 @@ class EzyAutoCompletions::Definition::Base
     @parent           = parent
     @contents         = []
     @definition_block = block
-    yield_block
+    yield_definition_block
   end
   
   # Example usage:
@@ -49,14 +49,15 @@ class EzyAutoCompletions::Definition::Base
   def autocompletable?(cmd_line_or_tokens)
     tokens = cmd_line_or_tokens.is_a?(String) ? cmd_line_or_tokens.split(/\s/) : cmd_line_or_tokens
     current, *remainder = tokens
-    return false unless matches_token?(current)
+    return false unless matches_token?(current) # current cmd-line doesn't match this Definition
     return true if remainder.empty?
-    return false unless definition = find_definition_by_token(current, remainder)
-    definition.yield_block
-    definition
+    if definition = find_definition_by_token(current, remainder)
+      return definition.autocompletable?(remainder)
+    end
+    yield_result_block
   end
   
-  def yield_block
+  def yield_definition_block
     if definition_block.nil?
       return
     elsif definition_block.arity == -1
@@ -67,6 +68,17 @@ class EzyAutoCompletions::Definition::Base
       raise EzyAutoCompletions::Definition::InvalidDefinitionBlockArguments
     end
   end
+
+  def yield_result_block
+    if definition_block.nil? || definition_block.arity == 1
+      nil
+    elsif definition_block.arity == -1
+      definition_block.call
+    else
+      raise EzyAutoCompletions::Definition::InvalidDefinitionBlockArguments
+    end
+  end
+
 
   protected
   

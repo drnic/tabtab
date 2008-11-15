@@ -6,6 +6,10 @@ module EzyAutoCompletions::Definition
       @description = description
       super description, &block
     end
+    
+    def definition_type
+      :command
+    end
 
     # Example usage:
     #   c.default do
@@ -23,5 +27,6 @@ module EzyAutoCompletions::Definition
     def matches_token?(cmd_line_token)
       cmd_line_token == name
     end
+
   end
 end

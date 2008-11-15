@@ -11,6 +11,10 @@ module EzyAutoCompletions::Definition
       super(nil, &block)
     end
 
+    def definition_type
+      :root
+    end
+
     # Determines if current token matches the app name
     def matches_token?(cmd_line_token)
       cmd_line_token == app_name
