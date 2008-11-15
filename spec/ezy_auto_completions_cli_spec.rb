@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 require 'ezy_auto_completions/cli'
 
-describe EzyAutoCompletions::CLI, "execute external for all options" do
+describe EzyAutoCompletions::CLI, "execute and find completions for external" do
   before(:each) do
     @cli = EzyAutoCompletions::CLI.new
     @options = mock do
@@ -15,6 +15,35 @@ describe EzyAutoCompletions::CLI, "execute external for all options" do
     @stdout = @stdout_io.read
   end
   
-  it "should fucking do something here... brain... doing some thinking please" do
+  it "should print completions" do
+    @stdout.should == <<-EOS.gsub(/^    /, '')
+    --help
+    --extra
+    -h
+    -x
+    EOS
+  end
+end
+
+describe EzyAutoCompletions::CLI, "execute and find completions for gem-based apps" do
+  before(:each) do
+    @cli = EzyAutoCompletions::CLI.new
+    @options = mock do
+      expects(:starts_with).with('').returns(['--help', '--extra', '-h', '-x'])
+    end
+    @cli.expects(:config).never
+    @stdout_io = StringIO.new
+    @cli.execute(@stdout_io, ['--gem', 'test_app', '', 'test_app'])
+    @stdout_io.rewind
+    @stdout = @stdout_io.read
+  end
+  
+  it "should print completions" do
+    @stdout.should == <<-EOS.gsub(/^    /, '')
+    --help
+    --extra
+    -h
+    -x
+    EOS
   end
 end
