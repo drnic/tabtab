@@ -7,3 +7,4 @@ end
 
 require 'ezy_auto_completions/local_config'
 require 'ezy_auto_completions/completions'
+require 'ezy_auto_completions/definitions'
