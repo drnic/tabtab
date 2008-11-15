@@ -11,6 +11,17 @@ module EzyAutoCompletions::Definition
       :command
     end
     
+    # How many tokens/parts of a command-line expression does this Flag consume
+    # For example, the following consume 1 token:
+    #   --simple
+    #   -s
+    # The following consumes 2 tokens:
+    #   --port 1234
+    def tokens_consumed
+      return 2 if definition_block
+      1
+    end
+
     def own_completions
       [name]
     end

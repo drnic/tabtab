@@ -49,6 +49,12 @@ class EzyAutoCompletions::Definition::Base
     contents.find { |definition| definition.matches_token?(token) }
   end
   
+  # How many tokens/parts of a command-line expression does this Flag consume
+  # By default, it is 1 token unless overridden by subclass
+  def tokens_consumed
+    1
+  end
+  
   def filtered_completions(prefix)
     completions_of_contents.grep(/^#{prefix}/)
   end

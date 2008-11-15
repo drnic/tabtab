@@ -1,5 +1,46 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
+describe "tokens_consumed for various" do
+  describe EzyAutoCompletions::Definition::Base, "definitions" do
+    before(:each) do
+      @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
+        c.command :simple
+        c.command :run do
+          %w[aaaa bbbb cccc]
+        end
+        c.command :stop do |stop|
+          stop.default do
+            %w[aaaa bbbb cccc]
+          end
+        end
+        c.flags :some_flag, :s
+        c.flag :flag_and_value do
+          %w[xxx yyy zzz]
+        end
+      end
+    end
+    
+    it "should consume 1 token for a simple command" do
+      @definitions['simple'].tokens_consumed.should == 1
+    end
+    
+    it "should consume 2 tokens for a command with value block" do
+      @definitions['run'].tokens_consumed.should == 2
+    end
+    
+    it "should consume 1 token for a command with a default value block" do
+      @definitions['stop'].tokens_consumed.should == 2
+    end
+    
+    it "should consume 1 token for a simple flag" do
+      @definitions['some_flag'].tokens_consumed.should == 1
+    end
+    
+    it "should consume 2 token for a flag with value block" do
+      @definitions['flag_and_value'].tokens_consumed.should == 2
+    end
+  end
+end
 describe "filtered_completions for" do
   describe EzyAutoCompletions::Definition::Root, "with flags and commands can return all terms for autocomplete" do
     before(:each) do
@@ -57,7 +98,7 @@ describe "filtered_completions for" do
       @stop.filtered_completions('').should == %w[aaaa bbbb cccc]
     end
 
-    it "should find ['aaaa', etc] for the flag via a block" do
+    it "should find ['xxx', etc] for the flag via a block" do
       @flag = @definitions['--flag_and_value']
       @flag.filtered_completions('').should == %w[xxx yyy zzz]
     end
