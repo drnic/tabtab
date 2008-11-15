@@ -28,10 +28,6 @@ module InstallEzyAutoCompletions
       end
     end
     
-    def home
-      ENV["HOME"] || ENV["HOMEPATH"] || File::expand_path("~")
-    end
-    
     def usage
       puts <<-EOS.gsub(/^      /, '')
       USAGE: create a file ~/.ezy_auto_completions.yml

@@ -15,5 +15,6 @@ describe EzyAutoCompletions::CLI, "execute for all options" do
     @stdout = @stdout_io.read
   end
   
-  it "should fucking do something here... brain... doing some thinking please"
+  it "should fucking do something here... brain... doing some thinking please" do
+  end
 end

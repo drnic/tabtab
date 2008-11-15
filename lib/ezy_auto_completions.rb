@@ -31,3 +31,5 @@ module EzyAutoCompletions
     end
   end
 end
+
+require 'ezy_auto_completions/local_config'

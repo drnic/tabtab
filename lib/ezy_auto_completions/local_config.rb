@@ -1,3 +1,5 @@
+require 'yaml'
+
 module EzyAutoCompletions::LocalConfig
   def config
     @config ||= begin
@@ -6,4 +8,9 @@ module EzyAutoCompletions::LocalConfig
       YAML.load(File.read(config_file))
     end
   end
+  
+  def home
+    ENV["HOME"] || ENV["HOMEPATH"] || File::expand_path("~")
+  end
+  
 end

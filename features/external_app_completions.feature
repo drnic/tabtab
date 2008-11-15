@@ -11,6 +11,7 @@ Feature: Autocompletions for any 3rd-party application's options
   
   Scenario: Activate auto-completions for app, determine options and return all
     Given a .ezy_auto_completions.yml config file
+    And env variable $PATH includes fixture executables folder
     When run local executable 'ezy_auto_completions' with arguments 'test_app'
     Then I should see a full list of options for 'test_app'
   
