@@ -9,12 +9,13 @@ module EzyAutoCompletions::Definition
     end
 
     def initialize(app_name)
-      super
+      super(nil)
       @app_name = app_name
     end
 
-    def autocompletable?(cmd_line)
-      false
+    # Determines if current token matches the app name
+    def matches_token?(cmd_line_token)
+      cmd_line_token == app_name
     end
   end
 end

@@ -40,7 +40,29 @@ class EzyAutoCompletions::Definition::Base
   #   myapp choose possible
   #   myapp set_speed --a_flag fast
   def command(name, description="", &block)
-    
+    contents << EzyAutoCompletions::Definition::Command.new(self, name, description, &block)
+  end
+
+  # Helper for test frameworks
+  def autocompletable?(cmd_line_or_tokens)
+    tokens = cmd_line_or_tokens.is_a?(String) ? cmd_line_or_tokens.split(/\s/) : cmd_line_or_tokens
+    current, *remainder = tokens
+    return false unless matches_token?(current)
+    return true if remainder.empty?
+    find_definition_by_token(current, remainder)
   end
   
+  protected
+  
+  # To be implemented by subclasses.
+  # Determines if this definition matches the current token
+  def matches_token?(cmd_line_token)
+    false
+  end
+
+  def find_definition_by_token(cmd_line_token, remainder)
+    contents.find do |definition|
+      definition.autocompletable?(remainder)
+    end
+  end
 end

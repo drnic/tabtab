@@ -1,8 +1,9 @@
 module EzyAutoCompletions::Definition
   class Command < Base
     attr_reader :name, :description
-    def initialize(name, description, &block)
-      @name        = name
+    def initialize(definition, name, description, &block)
+      super description
+      @name        = name.to_s
       @description = description
     end
 
@@ -16,6 +17,11 @@ module EzyAutoCompletions::Definition
     #   myapp this_command following
     def default(&block)
 
+    end
+
+    # Determines if current token matches this command's name
+    def matches_token?(cmd_line_token)
+      cmd_line_token == name
     end
   end
 end
