@@ -59,8 +59,8 @@ class EzyAutoCompletions::Definition::Base
   def yield_block
     if definition_block.nil?
       return
-    elsif definition_block.arity == 0
-      definition_block.call
+    elsif definition_block.arity == -1
+      # these blocks return a result/do lots of work - don't run them now
     elsif definition_block.arity == 1
       definition_block.call self
     else
