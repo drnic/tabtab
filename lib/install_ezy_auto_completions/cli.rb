@@ -23,7 +23,7 @@ module InstallEzyAutoCompletions
       for help_arg in externals.keys
         app_list = externals[help_arg]
         app_list.each do |app|
-          @to_file << "complete -o default -C ezy_auto_completions #{app}"
+          @to_file << "complete -o default -C 'ezy_auto_completions --external' #{app}"
         end unless app_list.nil?
       end
     end

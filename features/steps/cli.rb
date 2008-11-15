@@ -13,11 +13,11 @@ Given %r{^a .ezy_auto_completions.yml config file} do
   end
 end
 
-Then %r{^bash completions are ready to be installed for applications: (.*)$} do |app_list|
+Then %r{^(\w+) completions are ready to be installed for applications: (.*)$} do |type, app_list|
   in_home_folder do
     contents = File.read(".ezy_auto_completions.sh")
     app_list.split(/,\s*/).each do |app|
-      contents.should =~ /complete -o default -C ezy_auto_completions #{app}/
+      contents.should =~ /complete -o default -C 'ezy_auto_completions --#{type}' #{app}/
     end
   end
 end

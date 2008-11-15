@@ -7,7 +7,7 @@ describe InstallEzyAutoCompletions::CLI, "execute" do
     @cli = InstallEzyAutoCompletions::CLI.new
     @cli.expects(:config).returns({"external" => {"-h" => %w[test_app]}}).at_least(2)
     File.expects(:open).with('/tmp/some/home/.ezy_auto_completions.sh', 'w').returns(mock do
-      expects(:<<).with("complete -o default -C ezy_auto_completions test_app")
+      expects(:<<).with("complete -o default -C 'ezy_auto_completions --external' test_app")
       expects(:close)
     end)
     @stdout_io = StringIO.new
