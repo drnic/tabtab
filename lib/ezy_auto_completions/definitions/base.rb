@@ -25,15 +25,15 @@ class EzyAutoCompletions::Definition::Base
   alias_method :flag, :flags
 
   # Example usage:
-  #   c.command "run"
-  #   c.command "run", "Runs the good stuff"
-  #   c.command "choose", "Runs the good stuff", do
+  #   c.command :run
+  #   c.command :run, "Runs the good stuff"
+  #   c.command :choose, "Runs the good stuff", do
   #      %w[possible values for the commands argument]
   #   end
-  #   c.command "set_speed", "Runs the good stuff", do |run|
+  #   c.command :set_speed, "Runs the good stuff", do |run|
   #      run.flags :a_flag
-  #      run.command "slowly"
-  #      run.command "fast"
+  #      run.command :slowly
+  #      run.command :fast
   #   end
   # which map to example command-line expressions:
   #   myapp run
