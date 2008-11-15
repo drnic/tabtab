@@ -11,6 +11,12 @@ module EzyAutoCompletions::Definition
       :flag
     end
 
+    def unfiltered_completions
+      flags.map do |flag|
+        flag.size > 1 ? "--#{flag}" : "-#{flag}"
+      end
+    end
+    
     # Determines if current token matches this command's flags
     def matches_token?(cmd_line_token)
       flags.include? cmd_line_token.gsub(/^-*/,'')

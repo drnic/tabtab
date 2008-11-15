@@ -1,5 +1,34 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
+describe EzyAutoCompletions::Definition::Root, "with flags and commands can return all terms for autocomplete" do
+  before(:each) do
+    @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
+      c.command :run do
+        %w[aaaa bbbb cccc]
+      end
+      c.command :stop do |stop|
+        stop.default do
+          %w[aaaa bbbb cccc]
+        end
+      end
+      c.flags :some_flag, :s
+    end
+  end
+  
+  it "should return ['run', 'stop', '--some_flag', '-s'] as root-level completion options" do
+    @definitions.unfiltered_completions.should == ['run', 'stop', '--some_flag', '-s']
+  end
+  
+  it "should return ['run', 'stop', '--some_flag', '-s'] as root-level completion options unfiltered" do
+    @definitions.filtered_completions('').should == ['run', 'stop', '--some_flag', '-s']
+  end
+
+  it "should return ['--some_flag', '-s'] as root-level completion options filtered by '-'" do
+    @definitions.filtered_completions('-').should == ['--some_flag', '-s']
+  end
+
+end
+
 describe EzyAutoCompletions::Definition, "with invalid number of block args" do
   it "should raise an error for invalid root block definition" do
     lambda do

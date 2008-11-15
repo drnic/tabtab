@@ -45,6 +45,25 @@ class EzyAutoCompletions::Definition::Base
     contents << EzyAutoCompletions::Definition::Command.new(self, name, description, &block)
   end
 
+  def unfiltered_completions
+    @unfiltered_completions ||= unfiltered_completions_of_contents
+  end
+  
+  def unfiltered_completions_of_contents
+    contents.inject([]) do |mem, definition|
+      mem << definition.unfiltered_completions
+      mem
+    end.flatten
+  end
+
+  def filtered_completions(prefix)
+    unfiltered_completions.grep(/^#{prefix}/)
+  end
+  
+  #
+  # Test support
+  #
+  
   # Helper for test frameworks
   def autocompletable?(cmd_line_or_tokens)
     tokens = cmd_line_or_tokens.is_a?(String) ? cmd_line_or_tokens.split(/\s/) : cmd_line_or_tokens

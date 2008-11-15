@@ -10,6 +10,10 @@ module EzyAutoCompletions::Definition
     def definition_type
       :command
     end
+    
+    def unfiltered_completions
+      [name]
+    end
 
     # Example usage:
     #   c.default do
