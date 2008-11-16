@@ -46,6 +46,20 @@ describe EzyAutoCompletions::Definition, "select definition via [app_name]" do
   end
 end
 
+describe EzyAutoCompletions::Definition::Root, "extract_completions" do
+  before(:each) do
+    setup_definitions
+  end
+  
+  it "should return list of all root flags and commands" do
+    @definitions.extract_completions('someapp', '').should == ['simple', 'run', 'stop', 'multi', '--some_flag', '-s', '--flag_and_value']
+  end
+
+  it "should return list of flags and commands for a nested command" do
+    @definitions.extract_completions('multi', '').should == ['first', 'last']
+  end
+end
+
 describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expression and find active definition" do
   before(:each) do
     setup_definitions

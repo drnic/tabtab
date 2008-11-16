@@ -10,6 +10,11 @@ module EzyAutoCompletions::Definition
       @app_name = app_name
       super(nil, &block)
     end
+    
+    def extract_completions(previous_token, current_token)
+      current = (find_active_definition_for_last_token(previous_token) || self)
+      current.filtered_completions(current_token)
+    end
 
     def definition_type
       :root

@@ -44,7 +44,7 @@ module EzyAutoCompletions
     # Support for RubyGem-based apps (found in any gem path)
     #
     def process_gem arguments
-      stdout.puts EzyAutoCompletions::Completions::Gem.new(*arguments).extract
+      stdout.puts EzyAutoCompletions::Completions::Gem.new(*arguments).extract.join("\n")
     end
   end
 end
