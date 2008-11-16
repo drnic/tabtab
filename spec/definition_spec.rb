@@ -96,6 +96,10 @@ describe "filtered_completions for" do
       @definitions.filtered_completions('-').should == ['--some_flag', '-s', '--flag_and_value']
     end
     
+    it "should return ['aaaa', et] for 'run' command" do
+      @definitions['run'].filtered_completions('').should ==  %w[aaaa bbbb cccc]
+    end
+
     it "should return ['first', 'last'] for 'multi' command" do
       @definitions['multi'].filtered_completions('').should == ['first', 'last']
     end
