@@ -4,7 +4,7 @@ end
 
 Then /^I should see a full list of options for 'test_app'$/ do
   actual_output = File.read(File.join(@tmp_root, "executable.out"))
-  expected_output = %w[--extra --help -h -x].join("\n")
+  expected_output = %w[banana drink unlock --extra --help -h -x].join("\n")
   expected_output.should == actual_output.strip
 end
 
