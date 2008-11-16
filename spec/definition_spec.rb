@@ -21,6 +21,7 @@ def setup_definitions
     c.flag :flag_and_value do
       %w[xxx yyy zzz]
     end
+    
   end
 end
 
@@ -45,7 +46,7 @@ describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expre
     @definitions.find_active_definition_for_last_token('-s').should == @definitions['some_flag']
   end
 
-  it "should parse cmd-line 'myapp run dummy_value' and return the root definition" do
+  it "should parse cmd-line 'myapp run dummy_value' and return nil" do
     @definitions.find_active_definition_for_last_token('dummy_value').should be_nil
   end
 
@@ -53,7 +54,7 @@ describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expre
     @definitions.find_active_definition_for_last_token('multi').should == @definitions['multi']
   end
 
-  it "should parse cmd-line 'myapp multi start' and return the multi command definition" do
+  it "should parse cmd-line 'myapp multi first' and return the multi command definition" do
     @definitions.find_active_definition_for_last_token('first').should == @definitions['multi']['first']
   end
 

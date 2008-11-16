@@ -45,10 +45,19 @@ class EzyAutoCompletions::Definition::Base
     contents << EzyAutoCompletions::Definition::Command.new(self, name, description, &block)
   end
   
-  # Find a child/contents definition that supports a given token
+  # Find a direct child/contents definition that supports a given token
   def [](token)
     contents.find { |definition| definition.matches_token?(token) }
   end
+  
+  # Find any child definition that supports a given token
+  def find_active_definition_for_last_token(last_token)
+    self[last_token] || contents.inject([]) do |mem, definition|
+      mem << definition[last_token] if definition[last_token]
+      mem
+    end.first
+  end
+  
   
   # How many tokens/parts of a command-line expression does this Flag consume
   # By default, it is 1 token unless overridden by subclass
@@ -70,10 +79,6 @@ class EzyAutoCompletions::Definition::Base
 
   def own_completions
     []
-  end
-  
-  def find_active_definition_for_last_token(last_token)
-    self[last_token]
   end
   
   #
