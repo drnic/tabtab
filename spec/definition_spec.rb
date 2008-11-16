@@ -1,23 +1,57 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
+def setup_definitions
+  @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
+    c.command :simple
+    c.command :run do
+      %w[aaaa bbbb cccc]
+    end
+    c.command :stop do |stop|
+      stop.default do
+        %w[aaaa bbbb cccc]
+      end
+    end
+    c.flags :some_flag, :s
+    c.flag :flag_and_value do
+      %w[xxx yyy zzz]
+    end
+  end
+end
+
+describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expression and find active definition" do
+  before(:each) do
+    setup_definitions
+  end
+
+  it "should parse cmd-line 'myapp' and return self/root of definition" do
+    @definitions.find_active_definition_for_last_token('myapp').should == @definitions
+  end
+  
+  it "should parse cmd-line 'myapp run' and return the command definition" do
+    @definitions.find_active_definition_for_last_token('run').should == @definitions['run']
+  end
+  
+  it "should parse cmd-line 'myapp --some_flag' and return the flag definition" do
+    @definitions.find_active_definition_for_last_token('--some_flag').should == @definitions['some_flag']
+  end
+
+  it "should parse cmd-line 'myapp -s' and return the flag definition" do
+    @definitions.find_active_definition_for_last_token('-s').should == @definitions['some_flag']
+  end
+
+  it "should parse cmd-line 'myapp run dummy_value' and return the run command definition" do
+    @definitions.find_active_definition_for_last_token('dummy_value').should == @definitions
+  end
+
+  it "should parse cmd-line 'myapp --some_flag run' and return the run command definition" do
+    @definitions.find_active_definition_for_last_token('run').should == @definitions['run']
+  end
+end
+
 describe "tokens_consumed for various" do
   describe EzyAutoCompletions::Definition::Base, "definitions" do
     before(:each) do
-      @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
-        c.command :simple
-        c.command :run do
-          %w[aaaa bbbb cccc]
-        end
-        c.command :stop do |stop|
-          stop.default do
-            %w[aaaa bbbb cccc]
-          end
-        end
-        c.flags :some_flag, :s
-        c.flag :flag_and_value do
-          %w[xxx yyy zzz]
-        end
-      end
+      setup_definitions
     end
     
     it "should consume 1 token for a simple command" do
@@ -44,24 +78,11 @@ end
 describe "filtered_completions for" do
   describe EzyAutoCompletions::Definition::Root, "with flags and commands can return all terms for autocomplete" do
     before(:each) do
-      @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
-        c.command :run do
-          %w[aaaa bbbb cccc]
-        end
-        c.command :stop do |stop|
-          stop.default do
-            %w[aaaa bbbb cccc]
-          end
-        end
-        c.flags :some_flag, :s
-        c.flag :flag_and_value do
-          %w[xxx yyy zzz]
-        end
-      end
+      setup_definitions
     end
 
     it "should return ['run', 'stop', '--some_flag', '-s'] as root-level completion options unfiltered" do
-      @definitions.filtered_completions('').should == ['run', 'stop', '--some_flag', '-s', '--flag_and_value']
+      @definitions.filtered_completions('').should == ['simple', 'run', 'stop', '--some_flag', '-s', '--flag_and_value']
     end
 
     it "should return ['--some_flag', '-s'] as root-level completion options filtered by '-'" do
@@ -72,19 +93,7 @@ describe "filtered_completions for" do
 
   describe EzyAutoCompletions::Definition::Base, "for default values" do
     before(:each) do
-      @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
-        c.command :run do
-          %w[aaaa bbbb cccc]
-        end
-        c.command :stop do |stop|
-          stop.default do
-            %w[aaaa bbbb cccc]
-          end
-        end
-        c.flag :flag_and_value do
-          %w[xxx yyy zzz]
-        end
-      end
+      setup_definitions
     end
     
     it "should find ['aaaa', etc] for the run command via a block" do
