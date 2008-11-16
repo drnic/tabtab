@@ -11,6 +11,12 @@ def setup_definitions
         %w[aaaa bbbb cccc]
       end
     end
+    c.command :multi do |multi|
+      multi.command :first
+      multi.command :last do
+        %w[foo bar tar]
+      end
+    end
     c.flags :some_flag, :s
     c.flag :flag_and_value do
       %w[xxx yyy zzz]
@@ -48,6 +54,7 @@ describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expre
   end
 end
 
+# TODO - not using these functionality as only given last_token by complete API - remove it??
 describe "tokens_consumed for various" do
   describe EzyAutoCompletions::Definition::Base, "definitions" do
     before(:each) do
@@ -81,12 +88,16 @@ describe "filtered_completions for" do
       setup_definitions
     end
 
-    it "should return ['run', 'stop', '--some_flag', '-s'] as root-level completion options unfiltered" do
-      @definitions.filtered_completions('').should == ['simple', 'run', 'stop', '--some_flag', '-s', '--flag_and_value']
+    it "should return ['simple', 'run', 'stop', 'multi', '--some_flag', '-s'] as root-level completion options unfiltered" do
+      @definitions.filtered_completions('').should == ['simple', 'run', 'stop', 'multi', '--some_flag', '-s', '--flag_and_value']
     end
 
     it "should return ['--some_flag', '-s'] as root-level completion options filtered by '-'" do
       @definitions.filtered_completions('-').should == ['--some_flag', '-s', '--flag_and_value']
+    end
+    
+    it "should return ['first', 'last'] for 'multi' command" do
+      @definitions['multi'].filtered_completions('').should == ['first', 'last']
     end
 
   end

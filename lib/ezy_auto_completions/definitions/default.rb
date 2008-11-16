@@ -1,7 +1,9 @@
 module EzyAutoCompletions::Definition
   class Default < Base
-    def initialize(description=nil, &block)
-      super description, &block
+    attr_reader :description
+    def initialize(definition, description=nil, &block)
+      @description = description
+      super definition, &block
     end
     
     def definition_type

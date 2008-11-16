@@ -45,6 +45,7 @@ class EzyAutoCompletions::Definition::Base
     contents << EzyAutoCompletions::Definition::Command.new(self, name, description, &block)
   end
   
+  # Find a child/contents definition that supports a given token
   def [](token)
     contents.find { |definition| definition.matches_token?(token) }
   end
