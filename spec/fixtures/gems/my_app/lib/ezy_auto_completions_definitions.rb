@@ -8,7 +8,7 @@ EzyAutoCompletions::Definition.register('test_app') do |c|
     unlock.flag :port, :p do
       port = 3000
       until `netstat -an | grep "^tcp" | grep #{port}`.strip.empty? || port > 3010
-        port =+ 1
+        port += 1
       end
       port > 3010 ? [] : [port.to_s]
     end

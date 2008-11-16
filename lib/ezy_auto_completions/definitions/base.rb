@@ -70,7 +70,8 @@ class EzyAutoCompletions::Definition::Base
   end
 
   def completions_of_contents
-    return yield_result_block if contents.empty?
+    results = yield_result_block if contents.empty?
+    return results if results
     contents.inject([]) do |mem, definition|
       mem << definition.own_completions
       mem

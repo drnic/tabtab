@@ -73,6 +73,10 @@ describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expre
     @definitions.find_active_definition_for_last_token('myapp').should be_nil
   end
   
+  it "should parse cmd-line 'myapp simple' and return the command definition" do
+    @definitions.find_active_definition_for_last_token('simple').should == @definitions['simple']
+  end
+  
   it "should parse cmd-line 'myapp run' and return the command definition" do
     @definitions.find_active_definition_for_last_token('run').should == @definitions['run']
   end

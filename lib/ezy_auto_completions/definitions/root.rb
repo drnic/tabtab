@@ -14,10 +14,8 @@ module EzyAutoCompletions::Definition
     def extract_completions(previous_token, current_token)
       current = (find_active_definition_for_last_token(previous_token) || self)
       completions = current.filtered_completions(current_token)
-      grouped = completions.inject({}) do |mem, token|
-        mem[:long] ||= []
-        mem[:short] ||= []
-        mem[:command] ||= []
+      grouped = {:long => [], :short => [], :command => []}
+      grouped = completions.inject(grouped) do |mem, token|
         if token =~ /^--/
           mem[:long] << token
         elsif token =~ /^-/

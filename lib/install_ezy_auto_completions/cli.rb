@@ -14,7 +14,8 @@ module InstallEzyAutoCompletions
     def execute(stdout, arguments=[])
       usage unless config
       @to_file = File.open(File.join(home, ".ezy_auto_completions.sh"), "w")
-      self.install_externals
+      install_externals
+      install_from_gems
       @to_file.close
     end
    
@@ -25,6 +26,13 @@ module InstallEzyAutoCompletions
         app_list.each do |app|
           @to_file << "complete -o default -C 'ezy_auto_completions --external' #{app}"
         end unless app_list.nil?
+      end
+    end
+    
+    def install_from_gems
+      require "pp"
+      pp Gem.all_load_paths.select do |path|
+        Dir[File.join(path, "**", "ezy_auto_completions_definitions.rb")].first
       end
     end
     
