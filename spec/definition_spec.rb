@@ -218,3 +218,29 @@ describe EzyAutoCompletions::Definition, "with invalid number of block args" do
     end.should raise_error(EzyAutoCompletions::Definition::InvalidDefinitionBlockArguments)
   end
 end
+
+describe EzyAutoCompletions::Definition, "should not yield blocks until that value is required" do
+  before(:each) do
+    @normal_block_was_run, $default_block_was_run = false, 0
+    @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
+      c.command :run do
+        @normal_block_was_run = true
+      end
+      c.command :stop do |stop|
+        stop.default do
+          $default_block_was_run += 1
+        end
+      end
+    end
+  end
+  it "should not yield block upon creation" do
+    @normal_block_was_run.should be_false
+    $default_block_was_run.should == 0
+  end
+  
+  it "should not yield block upon #extract_completions" do
+    @definitions.extract_completions('myapp', '')
+    @normal_block_was_run.should be_false
+    $default_block_was_run.should == 0
+  end
+end

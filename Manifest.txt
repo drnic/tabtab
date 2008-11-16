@@ -5,10 +5,6 @@ README.rdoc
 Rakefile
 bin/ezy_auto_completions
 bin/install_ezy_auto_completions
-examples/algorithmic_arguments/README.markdown
-examples/commands/README.markdown
-examples/external_apps/README.markdown
-examples/simple_options/README.markdown
 features/development.feature
 features/discovered_gem_app_completions.feature
 features/external_app_completions.feature
@@ -45,7 +41,6 @@ spec/fixtures/gems/my_app/Rakefile
 spec/fixtures/gems/my_app/bin/test_app
 spec/fixtures/gems/my_app/lib/ezy_auto_completions_definitions.rb
 spec/fixtures/gems/my_app/lib/my_app.rb
-spec/fixtures/gems/my_app/my_app.gemspec
 spec/fixtures/gems/my_app/pkg/my_app-0.0.1.gem
 spec/fixtures/gems/my_app/pkg/my_app-0.0.1.tgz
 spec/fixtures/gems/my_app/pkg/my_app-0.0.1/History.txt
@@ -54,9 +49,9 @@ spec/fixtures/gems/my_app/pkg/my_app-0.0.1/Rakefile
 spec/fixtures/gems/my_app/pkg/my_app-0.0.1/bin/test_app
 spec/fixtures/gems/my_app/pkg/my_app-0.0.1/lib/ezy_auto_completions_definitions.rb
 spec/fixtures/gems/my_app/pkg/my_app-0.0.1/lib/my_app.rb
-spec/fixtures/gems/my_app/pkg/my_app-0.0.1/my_app.gemspec
 spec/framework_testing_spec.rb
 spec/install_ezy_auto_completions_cli_spec.rb
 spec/spec.opts
 spec/spec_helper.rb
+tabtab.png
 tasks/rspec.rake

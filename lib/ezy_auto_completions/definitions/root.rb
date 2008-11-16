@@ -12,7 +12,7 @@ module EzyAutoCompletions::Definition
     end
     
     def extract_completions(previous_token, current_token)
-      current = (find_active_definition_for_last_token(previous_token) || self)
+      current = find_active_definition_for_last_token(previous_token) || self
       current = (current.parent || self) if current.tokens_consumed == 1
       completions = current.filtered_completions(current_token)
       grouped = {:long => [], :short => [], :command => []}

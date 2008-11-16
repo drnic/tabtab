@@ -47,13 +47,14 @@ class EzyAutoCompletions::Definition::Base
   
   # Find a direct child/contents definition that supports a given token
   def [](token)
-    contents.find { |definition| definition.matches_token?(token) }
+    contents.find { |definition| definition.definition_type != :default && definition.matches_token?(token) }
   end
   
   # Find any child definition that supports a given token
   def find_active_definition_for_last_token(last_token)
     self[last_token] || contents.inject([]) do |mem, definition|
-      mem << definition[last_token] if definition[last_token]
+      child = definition[last_token]
+      mem << child if child
       mem
     end.first
   end
