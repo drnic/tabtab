@@ -1,11 +1,17 @@
 Given %r{^a user's RubyGems gem cache} do
   Given "a safe folder"
+  Given "env variable $GEM_HOME set to '#{gem_install_dir}'"
 end
 
-Given /^a RubyGem '(.*)' with executable '(.*)' with autocompletions$/ do |gem, executable|
-  gem_path = File.join(Gem.user_dir, "gems", gem)
-  FileUtils.cp_r(File.dirname(__FILE__) + "/../fixtures/gems/#{gem}", gem_path)
-  Dir[File.join(gem_path, "/#{gem}/**/*.rb_")].each do |file|
-    FileUtils.mv(file, file.gsub(/rb_$/, 'rb'))
+def gem_install_dir
+  install_dir = File.expand_path(File.join(@home_path), ".gem/ruby/1.8")
+end
+
+Given /^a RubyGem '(.*)' with executable '(.*)' with autocompletions$/ do |gem_name, executable|
+  @stdout = File.expand_path(File.join(@tmp_root, "geminstall.txt"))
+  FileUtils.chdir(File.join(File.dirname(__FILE__) + "/../../spec/fixtures/gems/#{gem_name}")) do
+    system "rake gemspec > #{@stdout} 2> #{@stdout}"
+    system "gem build #{gem_name}.gemspec > #{@stdout} 2> #{@stdout}"
+    system "gem install --install-dir #{gem_install_dir} #{gem_name}*.gem > #{@stdout} 2> #{@stdout}"
   end
 end

@@ -5,7 +5,7 @@ module EzyAutoCompletions
     include EzyAutoCompletions::LocalConfig
 
     attr_reader :stdout
-    attr_reader :app_type, :app_name, :previous, :current
+    attr_reader :app_type
 
     def self.execute(stdout, arguments=[])
       self.new.execute(stdout, arguments)
@@ -14,19 +14,18 @@ module EzyAutoCompletions
     def execute(stdout, arguments=[])
       @stdout = stdout
       usage unless @app_type = arguments.shift
-      @app_name, @current, @previous = arguments
       case @app_type.gsub(/^-*/, '').to_sym
       when :external
-        process_external
+        process_external *arguments
       when :gem
-        process_gem
+        process_gem arguments
       end
     end
     
     #
     # Support for external apps (optionally configured in ~/.ezy_auto_completions.yml)
     #
-    def process_external
+    def process_external(app_name, current, previous)
       usage unless config
       options_flag = externals.find { |flag, app_list| app_list.include?(app_name) }
       options_flag = options_flag.nil? ? '-h' : options_flag.first
@@ -44,8 +43,8 @@ module EzyAutoCompletions
     #
     # Support for RubyGem-based apps (found in any gem path)
     #
-    def process_gem
-      stdout.puts EzyAutoCompletions::Completions::Gem.new(app_name, current, previous).extract
+    def process_gem arguments
+      stdout.puts EzyAutoCompletions::Completions::Gem.new(*arguments).extract
     end
   end
 end
