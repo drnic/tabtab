@@ -51,8 +51,16 @@ describe EzyAutoCompletions::Definition::Root, "extract_completions" do
     setup_definitions
   end
   
-  it "should return list of all root flags and commands" do
+  it "should initially return list of all root flags and commands" do
     @definitions.extract_completions('someapp', '').should == ['multi', 'run', 'simple', 'stop', '--flag_and_value', '--some_flag', '-s']
+  end
+
+  it "should return list of all root flags and commands after simple command" do
+    @definitions.extract_completions('simple', '').should == ['multi', 'run', 'simple', 'stop', '--flag_and_value', '--some_flag', '-s']
+  end
+
+  it "should return list of all root flags and commands after simple flag" do
+    @definitions.extract_completions('--some_flag', '').should == ['multi', 'run', 'simple', 'stop', '--flag_and_value', '--some_flag', '-s']
   end
 
   it "should return list of all root flags and commands" do

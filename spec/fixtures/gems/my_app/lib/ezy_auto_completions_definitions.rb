@@ -3,7 +3,7 @@ EzyAutoCompletions::Definition.register('test_app') do |c|
   c.flags :extra, :x
   c.command :unlock do |unlock|
     unlock.default do
-      `git branch | sed -e "s/..//"`.split(/\n/)
+      `git branch | sed -e "s/..//"`.split(/\n/) rescue []
     end
     unlock.flag :port, :p do
       port = 3000
