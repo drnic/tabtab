@@ -2,10 +2,10 @@ class EzyAutoCompletions::Completions::Gem
   attr_reader :gem_name, :app_name, :current_token, :previous_token
   
   def initialize(gem_name, app_name, current_token, previous_token)
-    @gem_name = gem_name
-    @app_name = app_name
-    @current  = current_token
-    @previous = previous_token
+    @gem_name       = gem_name
+    @app_name       = app_name
+    @current_token  = current_token
+    @previous_token = previous_token
   end
 
   # Returns the sub-list of all options filtered by a common prefix
