@@ -73,9 +73,7 @@ class EzyAutoCompletions::Definition::Base
   end
   
   def find_active_definition_for_last_token(last_token)
-    begin
-      self[last_token]
-    end || self
+    self[last_token]
   end
   
   #

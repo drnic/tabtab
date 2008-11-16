@@ -29,8 +29,8 @@ describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expre
     setup_definitions
   end
 
-  it "should parse cmd-line 'myapp' and return self/root of definition" do
-    @definitions.find_active_definition_for_last_token('myapp').should == @definitions
+  it "should parse cmd-line 'myapp' and return nil" do
+    @definitions.find_active_definition_for_last_token('myapp').should be_nil
   end
   
   it "should parse cmd-line 'myapp run' and return the command definition" do
@@ -45,8 +45,24 @@ describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expre
     @definitions.find_active_definition_for_last_token('-s').should == @definitions['some_flag']
   end
 
-  it "should parse cmd-line 'myapp run dummy_value' and return the run command definition" do
-    @definitions.find_active_definition_for_last_token('dummy_value').should == @definitions
+  it "should parse cmd-line 'myapp run dummy_value' and return the root definition" do
+    @definitions.find_active_definition_for_last_token('dummy_value').should be_nil
+  end
+
+  it "should parse cmd-line 'myapp multi' and return the multi command definition" do
+    @definitions.find_active_definition_for_last_token('multi').should == @definitions['multi']
+  end
+
+  it "should parse cmd-line 'myapp multi start' and return the multi command definition" do
+    @definitions.find_active_definition_for_last_token('first').should == @definitions['multi']['first']
+  end
+
+  it "should parse cmd-line 'myapp multi last' and return the command definition" do
+    @definitions.find_active_definition_for_last_token('last').should == @definitions['multi']['last']
+  end
+
+  it "should parse cmd-line 'myapp multi last foo' and return the root definition" do
+    @definitions.find_active_definition_for_last_token('foo').should be_nil
   end
 
   it "should parse cmd-line 'myapp --some_flag run' and return the run command definition" do
