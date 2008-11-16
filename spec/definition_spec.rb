@@ -25,6 +25,17 @@ def setup_definitions
   end
 end
 
+describe EzyAutoCompletions::Definition, "register a complete definition" do
+  before(:each) do
+    EzyAutoCompletions::Definition::Root.expects(:named).with('someapp').returns(mock)
+    EzyAutoCompletions::Definition.register('someapp')
+  end
+
+  it "should register application" do
+    EzyAutoCompletions::Definition.registrations.should be_has_key('someapp')
+  end
+end
+
 describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expression and find active definition" do
   before(:each) do
     setup_definitions

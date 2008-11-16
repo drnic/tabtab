@@ -13,11 +13,12 @@ class EzyAutoCompletions::Completions::Gem
   # then +starts_with('--')+ returns +['--help', '--extra']+
   def extract
     require "rubygems"
+    require "ezy_auto_completions/definitions"
     orig_load_path = $LOAD_PATH.clone
     gem gem_name
     gem_lib_path = ($LOAD_PATH - orig_load_path).grep(/lib$/).first
     definitions_file = Dir[File.join(gem_lib_path, "ezy_auto_completions_definitions.rb")].first
     load definitions_file
-    EzyAutoCompletions::Definitions[app_name].extract_completions(previous_token, current_token)
+    EzyAutoCompletions::Definition[app_name].extract_completions(previous_token, current_token)
   end
 end
