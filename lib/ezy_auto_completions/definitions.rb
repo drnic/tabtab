@@ -8,6 +8,10 @@ module EzyAutoCompletions::Definition
       @registrations ||= {}
       @registrations[app_name] = Root.named(app_name, &block)
     end
+    
+    def [](app_name)
+      registrations[app_name]
+    end
   end
 end
 

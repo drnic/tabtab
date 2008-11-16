@@ -36,6 +36,16 @@ describe EzyAutoCompletions::Definition, "register a complete definition" do
   end
 end
 
+describe EzyAutoCompletions::Definition, "select definition via [app_name]" do
+  before(:each) do
+    EzyAutoCompletions::Definition.expects(:registrations).returns({"someapp" => mock})
+  end
+  
+  it "should find definition via Definition[someapp]" do
+    EzyAutoCompletions::Definition['someapp'].should_not be_nil
+  end
+end
+
 describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expression and find active definition" do
   before(:each) do
     setup_definitions
