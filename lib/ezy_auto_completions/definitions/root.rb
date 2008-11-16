@@ -13,7 +13,21 @@ module EzyAutoCompletions::Definition
     
     def extract_completions(previous_token, current_token)
       current = (find_active_definition_for_last_token(previous_token) || self)
-      current.filtered_completions(current_token)
+      completions = current.filtered_completions(current_token)
+      grouped = completions.inject({}) do |mem, token|
+        mem[:long] ||= []
+        mem[:short] ||= []
+        mem[:command] ||= []
+        if token =~ /^--/
+          mem[:long] << token
+        elsif token =~ /^-/
+          mem[:short] << token
+        else
+          mem[:command] << token
+        end
+        mem
+      end
+      grouped[:command].sort + grouped[:long].sort + grouped[:short].sort
     end
 
     def definition_type

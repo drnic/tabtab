@@ -52,7 +52,11 @@ describe EzyAutoCompletions::Definition::Root, "extract_completions" do
   end
   
   it "should return list of all root flags and commands" do
-    @definitions.extract_completions('someapp', '').should == ['simple', 'run', 'stop', 'multi', '--some_flag', '-s', '--flag_and_value']
+    @definitions.extract_completions('someapp', '').should == ['multi', 'run', 'simple', 'stop', '--flag_and_value', '--some_flag', '-s']
+  end
+
+  it "should return list of all root flags and commands" do
+    @definitions.extract_completions('someapp', '--').should == ['--flag_and_value', '--some_flag']
   end
 
   it "should return list of flags and commands for a nested command" do
