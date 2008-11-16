@@ -4,3 +4,4 @@ doc
 tmp
 *.log
 *.gem
+spec/**/*.gemspec
