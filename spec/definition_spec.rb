@@ -62,7 +62,7 @@ describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expre
     @definitions.find_active_definition_for_last_token('last').should == @definitions['multi']['last']
   end
 
-  it "should parse cmd-line 'myapp multi last foo' and return the root definition" do
+  it "should parse cmd-line 'myapp multi last foo' and return nil" do
     @definitions.find_active_definition_for_last_token('foo').should be_nil
   end
 
