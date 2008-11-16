@@ -4,7 +4,7 @@ module EzyAutoCompletions::Definition
     def initialize(definition, name, description, &block)
       @name        = name.to_s
       @description = description
-      super description, &block
+      super definition, &block
     end
     
     def definition_type

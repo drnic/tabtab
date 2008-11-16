@@ -70,6 +70,10 @@ describe EzyAutoCompletions::Definition::Root, "extract_completions" do
   it "should return list of flags and commands for a nested command" do
     @definitions.extract_completions('multi', '').should == ['first', 'last']
   end
+
+  it "should return list of multi's flags and commands after a simple command/flag" do
+    @definitions.extract_completions('first', '').should == ['first', 'last']
+  end
 end
 
 describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expression and find active definition" do
