@@ -14,14 +14,18 @@ class TabTab::Completions::Gem
   def extract
     require "rubygems"
     require "tabtab/definitions"
-    orig_load_path = $LOAD_PATH.clone
-    gem gem_name
-    gem_lib_path = ($LOAD_PATH - orig_load_path).grep(/lib$/).first.gsub(/\/lib$/, '')
-    if definitions_file = Dir[File.join(gem_lib_path, '**', "tabtab_definitions.rb")].first
-      load definitions_file
+    if definitions_file = load_gem_and_return_definitions_file
+      eval File.read(definitions_file)
       TabTab::Definition[app_name].extract_completions(previous_token, current_token)
     else
       []
     end
+  end
+  
+  def load_gem_and_return_definitions_file
+    orig_load_path = $LOAD_PATH.clone
+    gem gem_name
+    gem_lib_path = ($LOAD_PATH - orig_load_path).grep(/lib$/).first.gsub(/\/lib$/, '')
+    Dir[File.join(gem_lib_path, '**', "tabtab_definitions.rb")].first
   end
 end

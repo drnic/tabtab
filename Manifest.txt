@@ -8,6 +8,7 @@ bin/tabtab
 features/development.feature
 features/discovered_gem_app_completions.feature
 features/external_app_completions.feature
+features/file_completions.feature
 features/steps/cli.rb
 features/steps/common.rb
 features/steps/completions.rb
@@ -18,6 +19,7 @@ lib/tabtab.rb
 lib/tabtab/cli.rb
 lib/tabtab/completions.rb
 lib/tabtab/completions/external.rb
+lib/tabtab/completions/file.rb
 lib/tabtab/completions/gems.rb
 lib/tabtab/definitions.rb
 lib/tabtab/definitions/base.rb
@@ -40,20 +42,11 @@ spec/fixtures/gems/my_app/Rakefile
 spec/fixtures/gems/my_app/bin/test_app
 spec/fixtures/gems/my_app/lib/my_app.rb
 spec/fixtures/gems/my_app/lib/tabtab_definitions.rb
-spec/fixtures/gems/my_app/my_app-0.0.1.gem
 spec/fixtures/gems/my_app/my_app.gemspec
-spec/fixtures/gems/my_app/pkg/my_app-0.0.1.gem
-spec/fixtures/gems/my_app/pkg/my_app-0.0.1.tgz
-spec/fixtures/gems/my_app/pkg/my_app-0.0.1/History.txt
-spec/fixtures/gems/my_app/pkg/my_app-0.0.1/Manifest.txt
-spec/fixtures/gems/my_app/pkg/my_app-0.0.1/Rakefile
-spec/fixtures/gems/my_app/pkg/my_app-0.0.1/bin/test_app
-spec/fixtures/gems/my_app/pkg/my_app-0.0.1/lib/ezy_auto_completions_definitions.rb
-spec/fixtures/gems/my_app/pkg/my_app-0.0.1/lib/my_app.rb
 spec/framework_testing_spec.rb
 spec/install_tabtab_cli_spec.rb
 spec/spec.opts
 spec/spec_helper.rb
 spec/tabtab_cli_spec.rb
-tabtab.png
 tasks/rspec.rake
+website/images/tabtab.png

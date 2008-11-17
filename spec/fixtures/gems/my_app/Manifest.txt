@@ -2,5 +2,6 @@ History.txt
 Manifest.txt
 Rakefile
 bin/test_app
-lib/tabtab_definitions.rb
 lib/my_app.rb
+lib/tabtab_definitions.rb
+my_app.gemspec

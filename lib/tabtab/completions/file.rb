@@ -13,8 +13,7 @@ class TabTab::Completions::File
   # then +starts_with('--')+ returns +['--help', '--extra']+
   def extract
     if File.exists?(file_path)
-      definitions_file = File.read(file_path)
-      eval definitions_file
+      eval File.read(file_path)
       TabTab::Definition[app_name].extract_completions(previous_token, current_token)
     else
       []

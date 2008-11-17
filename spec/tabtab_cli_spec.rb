@@ -28,9 +28,13 @@ end
 describe TabTab::CLI, "--gem flag to local completion definitions in file" do
   before(:each) do
     @cli = TabTab::CLI.new
-    @options = mock do
-      expects(:starts_with).with('').returns(['--help', '--extra', '-h', '-x'])
-    end
+    TabTab::Completions::Gem.any_instance.expects(:load_gem_and_return_definitions_file).returns('/path/to/definition.rb')
+    File.expects(:read).with('/path/to/definition.rb').returns(<<-EOS.gsub(/^      /,''))
+      TabTab::Definition.register('test_app') do |c|
+        c.flags :help, :h, "help"
+        c.flags :extra, :x
+      end
+    EOS
     @cli.expects(:config).never
     @stdout_io = StringIO.new
     @cli.execute(@stdout_io, ['--gem', 'my_gem', 'test_app', '', 'test_app'])
@@ -40,8 +44,8 @@ describe TabTab::CLI, "--gem flag to local completion definitions in file" do
   
   it "should print completions" do
     @stdout.should == <<-EOS.gsub(/^    /, '')
-    --help
     --extra
+    --help
     -h
     -x
     EOS
