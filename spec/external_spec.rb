@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe EzyAutoCompletions::Completions::External, "extract verbose help output" do
+describe TabTab::Completions::External, "extract verbose help output" do
   before(:each) do
     options_str = <<-EOS.gsub(/^    /, '')
     Options are ...
@@ -25,7 +25,7 @@ describe EzyAutoCompletions::Completions::External, "extract verbose help output
          -b=BIN_NAME[,BIN_NAME2]          Should --ignore inline option
              --bin-name                   Default: -x
     EOS
-    @options = EzyAutoCompletions::Completions::External.new('app_name').extract(options_str)
+    @options = TabTab::Completions::External.new('app_name').extract(options_str)
   end
   
   it "should find all options" do

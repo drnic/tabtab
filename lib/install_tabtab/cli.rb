@@ -1,11 +1,11 @@
 require 'yaml'
-require 'ezy_auto_completions/local_config'
+require 'tabtab/local_config'
 
 # TODO extract into BashCompletion.install ...
 # TODO support non-Bash shells
-module InstallEzyAutoCompletions
+module InstallTabTab
   class CLI
-    include EzyAutoCompletions::LocalConfig
+    include TabTab::LocalConfig
     
     def self.execute(stdout, arguments=[])
       self.new.execute(stdout, arguments)
@@ -13,7 +13,7 @@ module InstallEzyAutoCompletions
     
     def execute(stdout, arguments=[])
       usage unless config
-      @to_file = File.open(File.join(home, ".ezy_auto_completions.sh"), "w")
+      @to_file = File.open(File.join(home, ".tabtab.sh"), "w")
       install_externals
       install_from_gems
       @to_file.close
@@ -24,7 +24,7 @@ module InstallEzyAutoCompletions
       for help_arg in externals.keys
         app_list = externals[help_arg]
         app_list.each do |app|
-          @to_file << "complete -o default -C 'ezy_auto_completions --external' #{app}"
+          @to_file << "complete -o default -C 'tabtab --external' #{app}"
         end unless app_list.nil?
       end
     end
@@ -32,13 +32,13 @@ module InstallEzyAutoCompletions
     def install_from_gems
       require "pp"
       pp Gem.all_load_paths.select do |path|
-        Dir[File.join(path, "**", "ezy_auto_completions_definitions.rb")].first
+        Dir[File.join(path, "**", "tabtab_definitions.rb")].first
       end
     end
     
     def usage
       puts <<-EOS.gsub(/^      /, '')
-      USAGE: create a file ~/.ezy_auto_completions.yml
+      USAGE: create a file ~/.tabtab.yml
       EOS
       exit 1
     end

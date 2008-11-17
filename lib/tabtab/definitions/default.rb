@@ -1,4 +1,4 @@
-module EzyAutoCompletions::Definition
+module TabTab::Definition
   class Default < Base
     attr_reader :description
     def initialize(definition, description=nil, &block)

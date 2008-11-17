@@ -1,6 +1,6 @@
-= ezy_auto_completions
+= tabtab
 
-* http://github.com/drnic/ezy_auto_completions
+* http://github.com/drnic/tabtab
 
 == DESCRIPTION:
 
@@ -12,14 +12,14 @@ FIX (describe your package)
 
 == SYNOPSIS:
 
-Create a ~/.ezy_auto_completions.yml file.
+Create a ~/.tabtab.yml file.
 
-Run `install_ezy_auto_completions`
+Run `install_tabtab`
 
 
 In your .profile (currently for bash, but zsh etc coming soon/need help) add:
 
-    source ~/.ezy_auto_completions.sh
+    source ~/.tabtab.sh
 
 == REQUIREMENTS:
 
@@ -27,7 +27,7 @@ In your .profile (currently for bash, but zsh etc coming soon/need help) add:
 
 == INSTALL:
 
-* sudo gem install ezy_auto_completions
+* sudo gem install tabtab
 
 == SPONSOR
 

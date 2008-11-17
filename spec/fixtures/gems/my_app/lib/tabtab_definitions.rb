@@ -1,4 +1,4 @@
-EzyAutoCompletions::Definition.register('test_app') do |c|
+TabTab::Definition.register('test_app') do |c|
   c.flags :help, :h, "help"
   c.flags :extra, :x
   c.command :unlock do |unlock|
@@ -19,7 +19,7 @@ EzyAutoCompletions::Definition.register('test_app') do |c|
   c.command :banana
 end
 
-EzyAutoCompletions::Definition.register('script/server') do |c|
+TabTab::Definition.register('script/server') do |c|
   c.flag :binding, :b
   c.flag :daemon, :d
   c.flag :debugger, :x
@@ -37,7 +37,7 @@ EzyAutoCompletions::Definition.register('script/server') do |c|
   end
 end
 
-EzyAutoCompletions::Definition.register('rails') do |c|
+TabTab::Definition.register('rails') do |c|
   c.flags :freeze, :f
   c.flags :version, :v
   c.flags :help, :h
@@ -60,7 +60,7 @@ EzyAutoCompletions::Definition.register('rails') do |c|
   end
 end
 
-EzyAutoCompletions::Definition.register('gem') do |c|
+TabTab::Definition.register('gem') do |c|
   c.flags :version, :v
   c.flags :h
   
@@ -109,13 +109,13 @@ EzyAutoCompletions::Definition.register('gem') do |c|
     end
   end
   c.command :help do
-    ['commands'] + EzyAutoCompletions::Definition['gem'].contents.select do |definition|
+    ['commands'] + TabTab::Definition['gem'].contents.select do |definition|
       definition.definition_type == :command
     end.map { |definition| definition.name }
   end
 end
 
-EzyAutoCompletions::Definition.register('github') do |c|
+TabTab::Definition.register('github') do |c|
   c.flag :help, :h
   c.command :fetch, "Fetch from a remote to a local branch."
   c.command :"pull-request", "Generate the text for a pull request."

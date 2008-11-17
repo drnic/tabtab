@@ -1,4 +1,4 @@
-module EzyAutoCompletions::Definition
+module TabTab::Definition
   class Root < Base
     attr_reader :app_name
 

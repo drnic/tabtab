@@ -1,4 +1,4 @@
-module EzyAutoCompletions::Definition
+module TabTab::Definition
   class Command < Base
     attr_reader :name, :description
     def initialize(definition, name, description, &block)
@@ -35,7 +35,7 @@ module EzyAutoCompletions::Definition
     #   myapp this_command value
     #   myapp this_command following
     def default(description=nil, &block)
-      contents << EzyAutoCompletions::Definition::Default.new(self, description, &block)
+      contents << TabTab::Definition::Default.new(self, description, &block)
     end
 
     # Determines if current token matches this command's name

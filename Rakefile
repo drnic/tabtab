@@ -1,9 +1,9 @@
 %w[rubygems rake rake/clean fileutils newgem rubigen].each { |f| require f }
-require File.dirname(__FILE__) + '/lib/ezy_auto_completions'
+require File.dirname(__FILE__) + '/lib/tabtab'
 
 # Generate all the Rake tasks
 # Run 'rake -T' to see list of generated tasks (from gem root directory)
-$hoe = Hoe.new('ezy_auto_completions', EzyAutoCompletions::VERSION) do |p|
+$hoe = Hoe.new('tabtab', TabTab::VERSION) do |p|
   p.developer('Dr Nic Williams', 'drnicwilliams@gmail.com')
   p.changes              = p.paragraphs_of("History.txt", 0..1).join("\n\n")
   p.post_install_message = 'PostInstall.txt'

@@ -2,5 +2,5 @@ History.txt
 Manifest.txt
 Rakefile
 bin/test_app
-lib/ezy_auto_completions_definitions.rb
+lib/tabtab_definitions.rb
 lib/my_app.rb

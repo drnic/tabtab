@@ -11,7 +11,7 @@ end
 
 require 'yaml'
 
-require File.dirname(__FILE__) + "/../../lib/ezy_auto_completions"
-require File.dirname(__FILE__) + "/../../lib/install_ezy_auto_completions/cli"
+require File.dirname(__FILE__) + "/../../lib/tabtab"
+require File.dirname(__FILE__) + "/../../lib/install_tabtab/cli"
 
 

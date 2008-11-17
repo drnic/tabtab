@@ -6,20 +6,20 @@ Feature: Discover completions config script in installed RubyGems
   Scenario: Find and add completions for rubygems' executables
     Given a user's RubyGems gem cache
     And a RubyGem 'my_app' with executable 'test_app' with autocompletions
-    When run local executable 'install_ezy_auto_completions' with arguments ''
-    Then home file '.ezy_auto_completions.sh' is created
+    When run local executable 'install_tabtab' with arguments ''
+    Then home file '.tabtab.sh' is created
     Then gem completions are ready to be installed for applications: test_app
   
   Scenario: Activate auto-completions for gem-based app, determine options and return all
     Given a user's RubyGems gem cache
     And a RubyGem 'my_app' with executable 'test_app' with autocompletions
-    When run local executable 'ezy_auto_completions' with arguments '--gem my_app test_app "" test_app'
+    When run local executable 'tabtab' with arguments '--gem my_app test_app "" test_app'
     Then I should see a full list of options for 'test_app'
 
   Scenario: Activate auto-completions for gem-based app, determine partial options and return all
     Given a user's RubyGems gem cache
     And a RubyGem 'my_app' with executable 'test_app' with autocompletions
-    When run local executable 'ezy_auto_completions' with arguments '--gem my_app test_app -- test_app'
+    When run local executable 'tabtab' with arguments '--gem my_app test_app -- test_app'
     Then I should see a partial list of options for 'test_app' starting with '--'
 
 

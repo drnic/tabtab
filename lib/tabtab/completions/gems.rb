@@ -1,4 +1,4 @@
-class EzyAutoCompletions::Completions::Gem
+class TabTab::Completions::Gem
   attr_reader :gem_name, :app_name, :current_token, :previous_token
   
   def initialize(gem_name, app_name, current_token, previous_token)
@@ -13,13 +13,13 @@ class EzyAutoCompletions::Completions::Gem
   # then +starts_with('--')+ returns +['--help', '--extra']+
   def extract
     require "rubygems"
-    require "ezy_auto_completions/definitions"
+    require "tabtab/definitions"
     orig_load_path = $LOAD_PATH.clone
     gem gem_name
     gem_lib_path = ($LOAD_PATH - orig_load_path).grep(/lib$/).first.gsub(/\/lib$/, '')
-    if definitions_file = Dir[File.join(gem_lib_path, '**', "ezy_auto_completions_definitions.rb")].first
+    if definitions_file = Dir[File.join(gem_lib_path, '**', "tabtab_definitions.rb")].first
       load definitions_file
-      EzyAutoCompletions::Definition[app_name].extract_completions(previous_token, current_token)
+      TabTab::Definition[app_name].extract_completions(previous_token, current_token)
     else
       []
     end

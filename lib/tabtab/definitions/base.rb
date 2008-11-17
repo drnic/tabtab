@@ -1,4 +1,4 @@
-class EzyAutoCompletions::Definition::Base
+class TabTab::Definition::Base
   attr_reader :parent, :contents, :definition_block
   
   def initialize(parent, &block)
@@ -22,7 +22,7 @@ class EzyAutoCompletions::Definition::Base
   def flags(*flags_and_description, &block)
     description = flags_and_description.pop if flags_and_description.last.is_a?(String)
     flag_names  = flags_and_description
-    contents << EzyAutoCompletions::Definition::Flag.new(self, flag_names, description, &block)
+    contents << TabTab::Definition::Flag.new(self, flag_names, description, &block)
   end
   alias_method :flag, :flags
 
@@ -42,7 +42,7 @@ class EzyAutoCompletions::Definition::Base
   #   myapp choose possible
   #   myapp set_speed --a_flag fast
   def command(name, description="", &block)
-    contents << EzyAutoCompletions::Definition::Command.new(self, name, description, &block)
+    contents << TabTab::Definition::Command.new(self, name, description, &block)
   end
   
   # Find a direct child/contents definition that supports a given token
@@ -108,7 +108,7 @@ class EzyAutoCompletions::Definition::Base
     elsif definition_block.arity == 1
       definition_block.call self
     else
-      raise EzyAutoCompletions::Definition::InvalidDefinitionBlockArguments
+      raise TabTab::Definition::InvalidDefinitionBlockArguments
     end
   end
 
@@ -118,7 +118,7 @@ class EzyAutoCompletions::Definition::Base
     elsif definition_block.arity == -1
       definition_block.call
     else
-      raise EzyAutoCompletions::Definition::InvalidDefinitionBlockArguments
+      raise TabTab::Definition::InvalidDefinitionBlockArguments
     end
   end
 

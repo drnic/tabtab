@@ -1,4 +1,4 @@
-class EzyAutoCompletions::Completions::External
+class TabTab::Completions::External
   def initialize(app_name, options_flag = '-h')
     @app_name     = app_name
     @options_flag = options_flag

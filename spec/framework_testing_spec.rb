@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-require "ezy_auto_completions/framework_testing"
+require "tabtab/framework_testing"
 
-describe EzyAutoCompletions::FrameworkTesting, "can be auto-completed with simple flag" do
+describe TabTab::FrameworkTesting, "can be auto-completed with simple flag" do
   before(:each) do
-    @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
+    @definitions = TabTab::Definition::Root.named('myapp') do |c|
       c.flags :flag, :f
     end
   end
@@ -13,9 +13,9 @@ describe EzyAutoCompletions::FrameworkTesting, "can be auto-completed with simpl
   end
 end
 
-describe EzyAutoCompletions::FrameworkTesting, "can be auto-completed with simple command" do
+describe TabTab::FrameworkTesting, "can be auto-completed with simple command" do
   before(:each) do
-    @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
+    @definitions = TabTab::Definition::Root.named('myapp') do |c|
       c.command :run
       c.command :stop
     end
@@ -28,9 +28,9 @@ describe EzyAutoCompletions::FrameworkTesting, "can be auto-completed with simpl
   end
 end
 
-describe EzyAutoCompletions::FrameworkTesting, "can be auto-completed with command and an argument" do
+describe TabTab::FrameworkTesting, "can be auto-completed with command and an argument" do
   before(:each) do
-    @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
+    @definitions = TabTab::Definition::Root.named('myapp') do |c|
       c.command :run do
         %w[aaaa bbbb cccc]
       end

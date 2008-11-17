@@ -1,4 +1,4 @@
-module EzyAutoCompletions::FrameworkTesting
+module TabTab::FrameworkTesting
 
   module StringExtensions
     def autocompletable_from?(autocompletion_definition)
@@ -8,4 +8,4 @@ module EzyAutoCompletions::FrameworkTesting
   
 end
 
-String.send(:include, EzyAutoCompletions::FrameworkTesting::StringExtensions)
+String.send(:include, TabTab::FrameworkTesting::StringExtensions)

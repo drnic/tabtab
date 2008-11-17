@@ -1,8 +1,8 @@
 require 'optparse'
 
-module EzyAutoCompletions
+module TabTab
   class CLI
-    include EzyAutoCompletions::LocalConfig
+    include TabTab::LocalConfig
 
     attr_reader :stdout
     attr_reader :app_type, :full_line
@@ -24,7 +24,7 @@ module EzyAutoCompletions
     end
     
     #
-    # Support for external apps (optionally configured in ~/.ezy_auto_completions.yml)
+    # Support for external apps (optionally configured in ~/.tabtab.yml)
     #
     def process_external(app_name, current, previous)
       usage unless config
@@ -38,14 +38,14 @@ module EzyAutoCompletions
     end
     
     def external_options(app, options_flag)
-      EzyAutoCompletions::Completions::External.new(app, options_flag)
+      TabTab::Completions::External.new(app, options_flag)
     end
     
     #
     # Support for RubyGem-based apps (found in any gem path)
     #
     def process_gem arguments
-      stdout.puts EzyAutoCompletions::Completions::Gem.new(*arguments).extract.join("\n")
+      stdout.puts TabTab::Completions::Gem.new(*arguments).extract.join("\n")
     end
   end
 end

@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 def setup_definitions
-  @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
+  @definitions = TabTab::Definition::Root.named('myapp') do |c|
     c.command :simple
     c.command :run do
       %w[aaaa bbbb cccc]
@@ -25,28 +25,28 @@ def setup_definitions
   end
 end
 
-describe EzyAutoCompletions::Definition, "register a complete definition" do
+describe TabTab::Definition, "register a complete definition" do
   before(:each) do
-    EzyAutoCompletions::Definition::Root.expects(:named).with('someapp').returns(mock)
-    EzyAutoCompletions::Definition.register('someapp')
+    TabTab::Definition::Root.expects(:named).with('someapp').returns(mock)
+    TabTab::Definition.register('someapp')
   end
 
   it "should register application" do
-    EzyAutoCompletions::Definition.registrations.should be_has_key('someapp')
+    TabTab::Definition.registrations.should be_has_key('someapp')
   end
 end
 
-describe EzyAutoCompletions::Definition, "select definition via [app_name]" do
+describe TabTab::Definition, "select definition via [app_name]" do
   before(:each) do
-    EzyAutoCompletions::Definition.expects(:registrations).returns({"someapp" => mock})
+    TabTab::Definition.expects(:registrations).returns({"someapp" => mock})
   end
   
   it "should find definition via Definition[someapp]" do
-    EzyAutoCompletions::Definition['someapp'].should_not be_nil
+    TabTab::Definition['someapp'].should_not be_nil
   end
 end
 
-describe EzyAutoCompletions::Definition::Root, "extract_completions" do
+describe TabTab::Definition::Root, "extract_completions" do
   before(:each) do
     setup_definitions
   end
@@ -76,7 +76,7 @@ describe EzyAutoCompletions::Definition::Root, "extract_completions" do
   end
 end
 
-describe EzyAutoCompletions::Definition::Root, "can parse current cmd-line expression and find active definition" do
+describe TabTab::Definition::Root, "can parse current cmd-line expression and find active definition" do
   before(:each) do
     setup_definitions
   end
@@ -128,7 +128,7 @@ end
 
 # TODO - not using these functionality as only given last_token by complete API - remove it??
 describe "tokens_consumed for various" do
-  describe EzyAutoCompletions::Definition::Base, "definitions" do
+  describe TabTab::Definition::Base, "definitions" do
     before(:each) do
       setup_definitions
     end
@@ -155,7 +155,7 @@ describe "tokens_consumed for various" do
   end
 end
 describe "filtered_completions for" do
-  describe EzyAutoCompletions::Definition::Root, "with flags and commands can return all terms for autocomplete" do
+  describe TabTab::Definition::Root, "with flags and commands can return all terms for autocomplete" do
     before(:each) do
       setup_definitions
     end
@@ -178,7 +178,7 @@ describe "filtered_completions for" do
 
   end
 
-  describe EzyAutoCompletions::Definition::Base, "for default values" do
+  describe TabTab::Definition::Base, "for default values" do
     before(:each) do
       setup_definitions
     end
@@ -201,28 +201,28 @@ describe "filtered_completions for" do
   end
 end
 
-describe EzyAutoCompletions::Definition, "with invalid number of block args" do
+describe TabTab::Definition, "with invalid number of block args" do
   it "should raise an error for invalid root block definition" do
     lambda do
-      EzyAutoCompletions::Definition::Root.named('myapp') do |c1, c2|
+      TabTab::Definition::Root.named('myapp') do |c1, c2|
       end
-    end.should raise_error(EzyAutoCompletions::Definition::InvalidDefinitionBlockArguments)
+    end.should raise_error(TabTab::Definition::InvalidDefinitionBlockArguments)
   end
 
   it "should raise an error for invalid command block definition" do
     lambda do
-      EzyAutoCompletions::Definition::Root.named('myapp') do |c|
+      TabTab::Definition::Root.named('myapp') do |c|
         c.command :stop do |arg1, arg2|
         end
       end
-    end.should raise_error(EzyAutoCompletions::Definition::InvalidDefinitionBlockArguments)
+    end.should raise_error(TabTab::Definition::InvalidDefinitionBlockArguments)
   end
 end
 
-describe EzyAutoCompletions::Definition, "should not yield blocks until that value is required" do
+describe TabTab::Definition, "should not yield blocks until that value is required" do
   before(:each) do
     @normal_block_was_run, $default_block_was_run = false, 0
-    @definitions = EzyAutoCompletions::Definition::Root.named('myapp') do |c|
+    @definitions = TabTab::Definition::Root.named('myapp') do |c|
       c.command :run do
         @normal_block_was_run = true
       end

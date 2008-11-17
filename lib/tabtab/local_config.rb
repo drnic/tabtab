@@ -1,9 +1,9 @@
 require 'yaml'
 
-module EzyAutoCompletions::LocalConfig
+module TabTab::LocalConfig
   def config
     @config ||= begin
-      config_file = File.join(home, '.ezy_auto_completions.yml')
+      config_file = File.join(home, '.tabtab.yml')
       return nil unless File.exists?(config_file)
       YAML.load(File.read(config_file))
     end

@@ -1,4 +1,4 @@
-module EzyAutoCompletions::Definition
+module TabTab::Definition
   class Flag < Base
     attr_reader :definition, :flags, :description
     def initialize(definition, flags, description, &block)

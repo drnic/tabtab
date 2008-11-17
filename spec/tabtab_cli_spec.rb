@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-require 'ezy_auto_completions/cli'
+require 'tabtab/cli'
 
-describe EzyAutoCompletions::CLI, "execute and find completions for external" do
+describe TabTab::CLI, "execute and find completions for external" do
   before(:each) do
-    @cli = EzyAutoCompletions::CLI.new
+    @cli = TabTab::CLI.new
     @options = mock do
       expects(:starts_with).with('').returns(['--help', '--extra', '-h', '-x'])
     end
@@ -25,9 +25,9 @@ describe EzyAutoCompletions::CLI, "execute and find completions for external" do
   end
 end
 
-describe EzyAutoCompletions::CLI, "execute and find completions for gem-based apps" do
+describe TabTab::CLI, "execute and find completions for gem-based apps" do
   before(:each) do
-    @cli = EzyAutoCompletions::CLI.new
+    @cli = TabTab::CLI.new
     @options = mock do
       expects(:starts_with).with('').returns(['--help', '--extra', '-h', '-x'])
     end

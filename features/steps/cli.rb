@@ -1,4 +1,4 @@
-Given %r{^a .ezy_auto_completions.yml config file} do
+Given %r{^a .tabtab.yml config file} do
   Given "a safe folder"
   in_home_folder do
     config = { 
@@ -7,7 +7,7 @@ Given %r{^a .ezy_auto_completions.yml config file} do
         '-?' => [] 
       }
     }
-    File.open('.ezy_auto_completions.yml', 'w') do |f|
+    File.open('.tabtab.yml', 'w') do |f|
       f << config.to_yaml
     end
   end
@@ -15,9 +15,9 @@ end
 
 Then %r{^(\w+) completions are ready to be installed for applications: (.*)$} do |type, app_list|
   in_home_folder do
-    contents = File.read(".ezy_auto_completions.sh")
+    contents = File.read(".tabtab.sh")
     app_list.split(/,\s*/).each do |app|
-      contents.should =~ /complete -o default -C 'ezy_auto_completions --#{type}' #{app}/
+      contents.should =~ /complete -o default -C 'tabtab --#{type}' #{app}/
     end
   end
 end

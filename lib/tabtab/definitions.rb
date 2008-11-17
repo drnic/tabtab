@@ -1,4 +1,4 @@
-module EzyAutoCompletions::Definition
+module TabTab::Definition
   class InvalidDefinitionBlockArguments < Exception; end
 
   class << self
