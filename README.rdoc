@@ -12,6 +12,24 @@ FIX (describe your package)
 
 == SYNOPSIS:
 
+Currently, I haven't finished the installer to set this stuff up for you. When 
+the project is released, it will have a simple-to-use installer. It will be 
+sex-on-a-stick.
+
+For now, you need to have your own, hand crafted ~/.tabtab.sh file, and run it from your 
+.profile.
+
+Here is a sample:
+
+  complete -o default -C "tabtab --external" curl
+  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" github 
+  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" rails
+  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" gem
+  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" rake
+  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" script/server
+  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" test_app
+
+
 Create a ~/.tabtab.yml file.
 
 Run `install_tabtab`
