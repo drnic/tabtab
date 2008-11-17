@@ -1,6 +1,6 @@
 require 'yaml'
+require 'rubygems'
 require 'tabtab'
-require 'tabtab/local_config'
 
 # TODO extract into BashCompletion.install ...
 # TODO support non-Bash shells
@@ -14,11 +14,13 @@ module InstallTabTab
     
     def execute(stdout, arguments=[])
       usage unless config
-      @to_file = File.open(File.join(home, ".tabtab.sh"), "w")
+      @to_file = []
       install_externals
       install_for_files
       install_from_gems
-      @to_file.close
+      @file = File.open(File.join(home, ".tabtab.sh"), "w")
+      @file << @to_file.join("\n")
+      @file.close
     end
    
     def install_externals

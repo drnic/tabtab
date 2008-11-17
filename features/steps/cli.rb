@@ -5,6 +5,9 @@ Given %r{^a .tabtab.yml config file} do
       'external' => { 
         '-h' => %w[rails test_app], 
         '-?' => [] 
+      },
+      'files' => { 
+        '/path/to/file.rb' => 'test_app' 
       }
     }
     File.open('.tabtab.yml', 'w') do |f|
@@ -27,11 +30,30 @@ Given /^a file '(.*)' containing completion definitions$/ do |file|
   end
 end
 
-Then %r{^(\w+) completions are ready to be installed for applications: (.*)$} do |type, app_list|
+Then %r{^external completions are ready to be installed for applications: (.*)$} do |app_list|
   in_home_folder do
     contents = File.read(".tabtab.sh")
     app_list.split(/,\s*/).each do |app|
-      contents.should =~ /complete -o default -C 'tabtab --#{type}' #{app}/
+      contents.should =~ /complete -o default -C 'tabtab --external' #{app}/
     end
   end
 end
+
+Then %r{^gem completions are ready to be installed for applications (.*) in gem (.*)$} do |app_list, gem_name|
+  in_home_folder do
+    contents = File.read(".tabtab.sh")
+    app_list.split(/,\s*/).each do |app|
+      contents.should =~ /complete -o default -C 'tabtab --gem #{gem_name}' #{app}/
+    end
+  end
+end
+
+Then %r{^file completions are ready to be installed for applications (.*) in file (.*)$} do |app_list, file_name|
+  in_home_folder do
+    contents = File.read(".tabtab.sh")
+    app_list.split(/,\s*/).each do |app|
+      contents.should =~ /complete -o default -C 'tabtab --file #{file_name}' #{app}/
+    end
+  end
+end
+
