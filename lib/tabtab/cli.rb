@@ -24,6 +24,8 @@ module TabTab
         process_gem arguments
       when :file
         process_file arguments
+      else
+        usage
       end
     end
     
@@ -62,6 +64,17 @@ module TabTab
     def process_file arguments
       definitions = TabTab::Completions::File.new(*arguments)
       stdout.puts definitions.extract.join("\n")
-    end  
+    end
+    
+    def usage
+      stdout.puts <<-EOS.gsub(/^      /, '')
+      Invalid #{@app_type} flag provided to #{$0}. 
+      USAGE: 
+        #{$0} --external
+        #{$0} --gem GEM_NAME
+        #{$0} --file FILE_PATH
+      EOS
+      exit
+    end
   end
 end
