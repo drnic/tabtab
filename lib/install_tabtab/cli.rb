@@ -20,7 +20,7 @@ module InstallTabTab
     end
    
     def install_externals
-      externals = config['external'] || config['externals']
+      return unless externals = config['external'] || config['externals']
       for help_arg in externals.keys
         app_list = externals[help_arg]
         app_list.each do |app|
