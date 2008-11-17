@@ -12,8 +12,10 @@ module TabTab
     end
     
     def execute(stdout, arguments=[])
+      require "shellwords"
       @stdout = stdout
       @full_line = ENV['COMP_LINE']
+      @full_line_argv = Shellwords.shellwords(@full_line)
       usage unless @app_type = arguments.shift
       case @app_type.gsub(/^-*/, '').to_sym
       when :external
