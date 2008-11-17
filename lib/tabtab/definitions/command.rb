@@ -1,10 +1,10 @@
 module TabTab::Definition
   class Command < Base
     attr_reader :name, :description
-    def initialize(definition, name, description, &block)
+    def initialize(parent, name, description, &block)
       @name        = name.to_s
       @description = description
-      super definition, &block
+      super parent, &block
     end
     
     def definition_type

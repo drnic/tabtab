@@ -21,7 +21,6 @@ def setup_definitions
     c.flag :flag_and_value do
       %w[xxx yyy zzz]
     end
-    
   end
 end
 
@@ -76,6 +75,29 @@ describe TabTab::Definition::Root, "extract_completions" do
   end
 end
 
+describe TabTab::Definition::Default, "can yield with different number of arguments" do
+  before(:each) do
+    @definitions = TabTab::Definition::Root.named('myapp') do |c|
+      c.command :zero do |zero|
+        zero.default { %w[zero] }
+      end
+      c.command :one do |one|
+        one.default { |current| ['one', current] }
+      end
+    end
+  end
+  
+  it "should run default blocks with zero arguments" do
+    tokens = @definitions.extract_completions("zero", "")
+    tokens.should == ['zero']
+  end
+  
+  it "should run default blocks with one arguments and pass current token as argument" do
+    tokens = @definitions.extract_completions('one', 'o')
+    tokens.should == ['o', 'one']
+  end
+  
+end
 describe TabTab::Definition::Root, "can parse current cmd-line expression and find active definition" do
   before(:each) do
     setup_definitions
@@ -221,26 +243,33 @@ end
 
 describe TabTab::Definition, "should not yield blocks until that value is required" do
   before(:each) do
-    @normal_block_was_run, $default_block_was_run = false, 0
+    @normal_block_was_run, @default_block_was_run, @root_default_block_was_run = 0, 0, 0
     @definitions = TabTab::Definition::Root.named('myapp') do |c|
       c.command :run do
-        @normal_block_was_run = true
+        @normal_block_was_run += 1
       end
       c.command :stop do |stop|
         stop.default do
-          $default_block_was_run += 1
+          @default_block_was_run += 1
         end
+      end
+      c.default do
+        @root_default_block_was_run += 1
       end
     end
   end
   it "should not yield block upon creation" do
-    @normal_block_was_run.should be_false
-    $default_block_was_run.should == 0
+    @normal_block_was_run.should == 0
+    @default_block_was_run.should == 0
+  end
+  
+  it "should yield root value block" do
+    @root_default_block_was_run.should == 1
   end
   
   it "should not yield block upon #extract_completions" do
     @definitions.extract_completions('myapp', '')
-    @normal_block_was_run.should be_false
-    $default_block_was_run.should == 0
+    @normal_block_was_run.should == 0
+    @default_block_was_run.should == 0
   end
 end

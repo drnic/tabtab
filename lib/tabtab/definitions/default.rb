@@ -1,9 +1,9 @@
 module TabTab::Definition
   class Default < Base
     attr_reader :description
-    def initialize(definition, description=nil, &block)
+    def initialize(parent, description=nil, &definition_block)
       @description = description
-      super definition, &block
+      super parent, &definition_block
     end
     
     def definition_type
@@ -12,6 +12,16 @@ module TabTab::Definition
 
     def own_completions
       yield_result_block
+    end
+    
+    def yield_result_block
+      if definition_block.arity == -1
+        definition_block.call
+      elsif definition_block.arity == 1
+        definition_block.call(parent.current_token)
+      else
+        raise TabTab::Definition::InvalidDefinitionBlockArguments
+      end
     end
 
     # Determines if current token matches this command's name

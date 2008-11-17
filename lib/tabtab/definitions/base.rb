@@ -122,6 +122,10 @@ class TabTab::Definition::Base
     end
   end
 
+  # recursively ask parents, until finding root, for current_token being completed
+  def current_token
+    parent.current_token
+  end
 
   protected
   
