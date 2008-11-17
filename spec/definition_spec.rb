@@ -241,7 +241,7 @@ describe TabTab::Definition, "with invalid number of block args" do
   end
 end
 
-describe TabTab::Definition, "should not yield blocks until that value is required" do
+describe TabTab::Definition, "should not yield blocks upon creation" do
   before(:each) do
     @normal_block_was_run, @default_block_was_run, @root_default_block_was_run = 0, 0, 0
     @definitions = TabTab::Definition::Root.named('myapp') do |c|
@@ -257,6 +257,40 @@ describe TabTab::Definition, "should not yield blocks until that value is requir
         @root_default_block_was_run += 1
       end
     end
+  end
+  it "should not yield block upon creation" do
+    @normal_block_was_run.should == 0
+    @default_block_was_run.should == 0
+  end
+  
+  it "should not yield root value block" do
+    @root_default_block_was_run.should == 0
+  end
+  
+  it "should not yield block upon #extract_completions" do
+    @definitions.extract_completions('myapp', '')
+    @normal_block_was_run.should == 0
+    @default_block_was_run.should == 0
+  end
+end
+
+describe TabTab::Definition, "should not yield command blocks when gathering root options" do
+  before(:each) do
+    @normal_block_was_run, @default_block_was_run, @root_default_block_was_run = 0, 0, 0
+    @definitions = TabTab::Definition::Root.named('myapp') do |c|
+      c.command :run do
+        @normal_block_was_run += 1
+      end
+      c.command :stop do |stop|
+        stop.default do
+          @default_block_was_run += 1
+        end
+      end
+      c.default do
+        @root_default_block_was_run += 1
+      end
+    end
+    @definitions.extract_completions('myapp', '')
   end
   it "should not yield block upon creation" do
     @normal_block_was_run.should == 0
