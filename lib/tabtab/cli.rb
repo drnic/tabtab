@@ -14,9 +14,9 @@ module TabTab
     def execute(stdout, arguments=[])
       require "shellwords"
       @stdout = stdout
-      @full_line = ENV['COMP_LINE']
-      @full_line_argv = Shellwords.shellwords(@full_line)
-      usage unless @app_type = arguments.shift
+      # @full_line = ENV['COMP_LINE']
+      # @full_line_argv = Shellwords.shellwords(@full_line)
+      return "" unless @app_type = arguments.shift
       case @app_type.gsub(/^-*/, '').to_sym
       when :external
         process_external *arguments
@@ -60,7 +60,8 @@ module TabTab
     #   --file /path/to/definition.rb
     #
     def process_file arguments
-        stdout.puts TabTab::Completions::File.new(*arguments).extract.join("\n")
-      end
+      definitions = TabTab::Completions::File.new(*arguments)
+      stdout.puts definitions.extract.join("\n")
+    end  
   end
 end
