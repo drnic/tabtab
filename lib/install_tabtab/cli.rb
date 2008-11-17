@@ -16,6 +16,7 @@ module InstallTabTab
       usage unless config
       @to_file = File.open(File.join(home, ".tabtab.sh"), "w")
       install_externals
+      install_for_files
       install_from_gems
       @to_file.close
     end
@@ -24,10 +25,26 @@ module InstallTabTab
       return unless externals = config['external'] || config['externals']
       for help_arg in externals.keys
         app_list = externals[help_arg]
-        app_list.each do |app|
-          @to_file << "complete -o default -C 'tabtab --external' #{app}"
+        app_list.each do |app_name|
+          @to_file << "complete -o default -C 'tabtab --external' #{app_name}"
         end unless app_list.nil?
       end
+    end
+    
+    def install_for_files
+      return unless files_and_names = config['file'] || config['files']
+      for file in files_and_names.keys
+        case app_names = files_and_names[file]
+        when String
+          install_file file, app_names
+        when Array
+          app_names.each { |app_name| install_file(file, app_name) }
+        end
+      end
+    end
+    
+    def install_file(file, app_name)
+      @to_file << "complete -o default -C 'tabtab --file #{File.expand_path(file)}' #{app_name}"
     end
     
     def install_from_gems
