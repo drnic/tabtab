@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 require 'install_tabtab/cli'
 
-describe InstallTabTab::CLI, "execute" do
+describe InstallTabTab::CLI, "with --external app flag" do
   before(:each) do
     ENV['HOME'] = '/tmp/some/home'
     @cli = InstallTabTab::CLI.new
@@ -11,7 +11,7 @@ describe InstallTabTab::CLI, "execute" do
       expects(:close)
     end)
     @stdout_io = StringIO.new
-    @cli.execute(@stdout_io, [])
+    @cli.execute(@stdout_io, ['--external', 'some_app', '', 'some_app'])
     @stdout_io.rewind
     @stdout = @stdout_io.read
   end

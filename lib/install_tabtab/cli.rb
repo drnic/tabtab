@@ -30,9 +30,16 @@ module InstallTabTab
     end
     
     def install_from_gems
-      require "pp"
-      pp Gem.all_load_paths.select do |path|
-        Dir[File.join(path, "**", "tabtab_definitions.rb")].first
+      definition_files = find_all_definition_files_from_gems
+
+    end
+    
+    def find_all_definition_files_from_gems
+      Gem.all_load_paths.inject([]) do |mem, path|
+        if file = Dir[File.join(path, "**", "tabtab_definitions.rb")].first
+          mem << file if file
+        end
+        mem
       end
     end
     
