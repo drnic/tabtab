@@ -1,4 +1,5 @@
 require 'yaml'
+require 'tabtab'
 require 'tabtab/local_config'
 
 # TODO extract into BashCompletion.install ...
@@ -30,14 +31,20 @@ module InstallTabTab
     end
     
     def install_from_gems
-      definition_files = find_all_definition_files_from_gems
-
+      find_gems_with_definition_files.each do |gem|
+        gem[:app_names].each do |app_name|
+          @to_file << "complete -o default -C 'tabtab --gem #{gem[:gem_name]}' #{app_name}"
+        end
+      end
     end
     
-    def find_all_definition_files_from_gems
+    def find_gems_with_definition_files
       Gem.all_load_paths.inject([]) do |mem, path|
         if file = Dir[File.join(path, "**", "tabtab_definitions.rb")].first
-          mem << file if file
+          gem_name = file.match(/\/([^\/]*)-\d+.\d+.\d+\/lib\//)[1]
+          TabTab::Definition.clear
+          eval File.read(file)
+          mem << { :gem_name => gem_name, :app_names => TabTab::Definition.app_names }
         end
         mem
       end

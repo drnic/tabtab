@@ -10,6 +10,7 @@ describe InstallTabTab::CLI, "with --external app flag" do
       expects(:<<).with("complete -o default -C 'tabtab --external' test_app")
       expects(:close)
     end)
+    Gem.expects(:all_load_paths).returns([])
     @stdout_io = StringIO.new
     @cli.execute(@stdout_io, ['--external', 'some_app', '', 'some_app'])
     @stdout_io.rewind
@@ -28,16 +29,31 @@ describe InstallTabTab::CLI, "with --gem GEM_NAME app flag" do
     @cli = InstallTabTab::CLI.new
     @cli.expects(:config).returns({}).at_least(1)
     File.expects(:open).with('/tmp/some/home/.tabtab.sh', 'w').returns(mock do
-      expects(:<<).with("complete -o default -C 'tabtab --gem my_app' test_app")
+      expects(:<<).with("complete -o default -C 'tabtab --gem gem_with_tabtabs' tabtabbed_app")
+      expects(:<<).with("complete -o default -C 'tabtab --gem gem_with_tabtabs' another_app")
       expects(:close)
     end)
+    Gem.expects(:all_load_paths).returns(['/gems/gem_with_tabtabs-1.0.0/lib'])
+    Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/lib/**/tabtab_definitions.rb').returns(['/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions.rb'])
+    File.expects(:read).with('/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions.rb').returns(<<-EOS.gsub(/^      /,''))
+    TabTab::Definition.register('tabtabbed_app') do |c|
+      c.flags :help, :h, "help"
+      c.flags :extra, :x
+    end
+    TabTab::Definition.register('another_app') do |c|
+      c.flags :help, :h, "help"
+      c.flags :extra, :x
+    end
+    EOS
     @stdout_io = StringIO.new
     @cli.execute(@stdout_io, ['--external', 'some_app', '', 'some_app'])
     @stdout_io.rewind
     @stdout = @stdout_io.read
   end
   
-  it "should create a home file .tabtab.sh"
+  it "should create a home file .tabtab.sh" do
+    # verify mocks
+  end
 
 end
 
@@ -50,13 +66,16 @@ describe InstallTabTab::CLI, "with --file FILE_NAME app flag" do
       expects(:<<).with("complete -o default -C 'tabtab --file /path/to/definition.rb' test_app")
       expects(:close)
     end)
+    Gem.expects(:all_load_paths).returns([])
     @stdout_io = StringIO.new
     @cli.execute(@stdout_io, ['--external', 'some_app', '', 'some_app'])
     @stdout_io.rewind
     @stdout = @stdout_io.read
   end
   
-  it "should create a home file .tabtab.sh"
+  it "should create a home file .tabtab.sh" do
+    # verify mocks
+  end
 
 end
 
