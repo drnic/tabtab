@@ -5,7 +5,7 @@ module EzyAutoCompletions
     include EzyAutoCompletions::LocalConfig
 
     attr_reader :stdout
-    attr_reader :app_type
+    attr_reader :app_type, :full_line
 
     def self.execute(stdout, arguments=[])
       self.new.execute(stdout, arguments)
@@ -13,6 +13,7 @@ module EzyAutoCompletions
     
     def execute(stdout, arguments=[])
       @stdout = stdout
+      @full_line = ENV['COMP_LINE']
       usage unless @app_type = arguments.shift
       case @app_type.gsub(/^-*/, '').to_sym
       when :external
