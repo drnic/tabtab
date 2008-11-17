@@ -306,4 +306,6 @@ describe TabTab::Definition, "should not yield command blocks when gathering roo
     @normal_block_was_run.should == 0
     @default_block_was_run.should == 0
   end
+  
+  it "should be failing in here somewhere - in production these blocks are being run!"
 end
