@@ -20,11 +20,15 @@ module TabTab
         process_external *arguments
       when :gem
         process_gem arguments
+      when :file
+        process_file arguments
       end
     end
     
     #
     # Support for external apps (optionally configured in ~/.tabtab.yml)
+    # Generates a completion list from the -h help output of the target application
+    #   --external
     #
     def process_external(app_name, current, previous)
       usage unless config
@@ -42,10 +46,19 @@ module TabTab
     end
     
     #
-    # Support for RubyGem-based apps (found in any gem path)
+    # Support for RubyGem-based completion definitions (found in any gem path)
+    #   --gem gem_name
     #
     def process_gem arguments
       stdout.puts TabTab::Completions::Gem.new(*arguments).extract.join("\n")
     end
+    
+    #
+    # Support for file-based completion definitions (found in target file)
+    #   --file /path/to/definition.rb
+    #
+    def process_file arguments
+        stdout.puts TabTab::Completions::File.new(*arguments).extract.join("\n")
+      end
   end
 end

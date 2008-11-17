@@ -17,11 +17,11 @@ Given /^a file '(.*)' containing completion definitions$/ do |file|
   Given "a safe folder"
   in_project_folder do
     File.open(file, "w") do |f|
-      f << <<-RUBY.gsub(/^      /,'')
-      TabTab::Definition.register('test_app') do |c|
-        c.flags :help, :h, "help"
-        c.flags :extra, :x
-      end
+      f << <<-RUBY.gsub(/^        /,'')
+        TabTab::Definition.register('test_app') do |c|
+          c.flags :help, :h, "help"
+          c.flags :extra, :x
+        end
       RUBY
     end
   end
