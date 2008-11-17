@@ -4,4 +4,9 @@ Rakefile
 bin/test_app
 lib/my_app.rb
 lib/tabtab_definitions.rb
+lib/tabtab_definitions/gem.rb
+lib/tabtab_definitions/github.rb
+lib/tabtab_definitions/rails.rb
+lib/tabtab_definitions/rake.rb
+lib/tabtab_definitions/script-server.rb
 my_app.gemspec
