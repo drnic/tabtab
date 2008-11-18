@@ -1,51 +1,162 @@
 = tabtab
 
-* http://github.com/drnic/tabtab
+* http://tabtab.rubyforge.org
 
 == DESCRIPTION:
 
-FIX (describe your package)
+Create and install double-tab ('tab tab') auto-completions for any 
+command-line application on any shell (bash, fish, ksh, etc).
+
+When you use the command-line, you can double-tab to auto-complete the name
+of a command-line application or a target file or folder. Its possible to
+provide your own completions for applications: git comes with bash shell completions,
+and the fish shell includes a library of completions for many applications.
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+* Completion defintions/recipes are shell agnostic (bash, fish, ksh, etc)
+* Definitions are written in Ruby
+* Can be bundled within RubyGems or explicitly referenced in files
 
-== SYNOPSIS:
+== SAMPLE DEFINITION:
 
-Currently, I haven't finished the installer to set this stuff up for you. When 
-the project is released, it will have a simple-to-use installer. It will be 
-sex-on-a-stick.
+TabTab definitions for auto-completions are very easy to write. Initially
+you can store them in a normal Ruby file (say ~/.tabtab/myapp.rb) and
+later, if the application is a Ruby application and distributed as a RubyGem
+you can bundle it with the distribution.
 
-For now, you need to have your own, hand crafted ~/.tabtab.bash file, and run it from your 
-.profile.
+=== Flags
 
-Here is a sample:
+A sample TabTab definition for the script/server command that is found 
+within all Ruby on Rails applications:
 
-  complete -o default -C "tabtab --external" curl
-  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" github 
-  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" rails
-  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" gem
-  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" rake
-  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" script/server
-  complete -o default -C "tabtab --file /path/to/gems/tabtab/spec/fixtures/gems/my_app/lib/tabtab_definitions.rb" test_app
+    TabTab::Definition.register('script/server') do |c|
+      c.flag :debugger, :d
+      c.flag :environment, :e do
+        Dir['config/environments/*.rb'].map { |env| env.gsub(/^.*environments\//,'').gsub(/.rb$/,'') }
+      end
+      # script/server -p TABTAB -> generated first available port 3000, 3001, 3002
+      c.flag :port, :p do
+        port = 3000
+        until `netstat -an | grep "^tcp" | grep #{port}`.strip.empty? || port > 3010
+          port += 1
+        end
+        port > 3010 ? [] : [port.to_s]
+      end
+    end
 
+This definition defines 3 flags (each with short and long names): --debugger, --environment, and --port. 
+The --debugger flag is a simple autocompletion. At the command-line, if you typed "script/server --d" and 
+pressed double-tab it would instantly complete to "script/server --debugger ".
+
+The other two flags can take values (e.g. "--environment development" or "--port 3000") and their 
+definitions are more powerful. If you double-tab after "script/server --environment " you will be
+presented with options [development, test, production] for completion. If you type the first
+letter, it will complete to the full value.
+
+Similarly for "--port". The algorithm above will find the first available port number from 3000+. 
+As it only returns a single value in its result array, this value is automatically displayed 
+on the command line. Very tricky indeed.
+
+The #flag method (and its alias #flags) takes 1+ symbols describing the flag names. Its last
+argument can be a string as a description. This is not used for bash shell users, but is
+available to ksh/fish users who's autocompletion systems are capable of displaying them
+inline with the completion options.
+
+The #flag method can also take a block. The result of the block must be an array of strings.
+These blocks (also available to #command and #default methods below) are called 'value blocks'.
+They return the complete, or a useful subset, of available values for the flag or command.
+
+=== Commands
+
+Many command-line apps take a command as their first argument. For example, the github CLI 
+has commands such as: info, pull, and network. The latter even has sub-commands.
+Subsequently, you might run the following at the command line:
+
+    github info
+    github pull drnic
+    github network commits
+    github network web drnic
+
+The following sample of the tabtab definition for the github command
+shows how tabtab can provide autocompletions for every example above,
+including the user values for the 'github pull' and 'github network web' commands.
+
+    TabTab::Definition.register('github') do |c|
+      def users
+        `github info | grep "^ -" | sed -e "s/ - //" | sed -e "s/ .*$//"`.split("\n")
+      end
+      c.command :info, "Show info"
+      c.command :pull, "Pull from a remote." do |pull|
+        pull.default { users }
+        pull.flag :merge
+      end
+      c.command :network, "Project network tools" do |network|
+        network.command(:web) { user_list }
+        network.command :commits
+      end
+    end
+
+The #command method requires a symbol for the name, and can take a string for the 
+command description (see Flags section above).
+
+The #command method can also take a value block, like #flag above. It must return
+an array of strings.
+
+The above example shows the behaviour of the 'github network web' command being abstracted 
+into a separate method. Similarly, this method could be defined in an external Module,
+and included as necessary.
+
+Note that 'pull.flag :merge' defines that 'github pull' can complete to 'github pull --merge' 
+as well as the list of values returned from the #default value block.
+
+=== Default value blocks
+
+In the sample github definition above, the 'c.command :pull' value block is not
+the immediate block passed to the #command method. Instead the value block is 
+defined via 'pull.default {  }' This is an alternate syntax to the earlier value block,
+and is used where your command can autocomplete to various flags, sub-commands or other 
+from within a generated list of values (via the #default value block).
+
+== INSTALL:
+
+* sudo gem install tabtab
+
+== SETUP:
 
 Create a ~/.tabtab.yml file.
 
 Run `install_tabtab`
 
-
-In your .profile (currently for bash, but zsh etc coming soon/need help) add:
+In your .bash_profile add:
 
     source ~/.tabtab.bash
 
+=== FUTURE SHELLS:
+
+In your .fish_profile add:
+
+    source ~/.tabtab.fish
+
+In your .ksh_profile add:
+
+    source ~/.tabtab.ksh
+
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+Currently, tabtab works with the bash shell, though it is designed to be
+shell agnostic.
 
-== INSTALL:
+== SOURCE:
 
-* sudo gem install tabtab
+The source for this project is at http://github.com/drnic/tabtab
+
+Using git, you can clone the project, run its tests and install it:
+
+    git clone git://github.com/drnic/tabtab.git
+    cd tabtab
+    rake
+    rake install_gem
 
 == SPONSOR
 

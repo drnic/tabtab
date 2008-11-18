@@ -1,4 +1,6 @@
 TabTab::Definition.register('cucumber', :import => '--help') do |c|
+  c.flags(:color)
+  c.flags(:"no-color")
   c.flags(:profile, :p) do
     next [] unless File.exists?('cucumber.yml')
     require 'yaml'
@@ -14,6 +16,4 @@ TabTab::Definition.register('cucumber', :import => '--help') do |c|
     languages = help.match(/Available languages:(.*)$/)[1]
     languages.split(/,\s*/)
   end
-  c.flags(:color, :c)
-  c.flags(:"no-color", :c)
 end
