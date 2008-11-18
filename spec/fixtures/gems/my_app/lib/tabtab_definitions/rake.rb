@@ -1,4 +1,4 @@
-TabTab::Definition.register('rake') do |c|
+TabTab::Definition.register('rake', :import => true) do |c|
   def rake_silent_tasks
     if File.exists?(dotcache = File.join(File.expand_path('~'), ".raketabs-#{Dir.pwd.hash}"))
       File.read(dotcache)

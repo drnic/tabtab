@@ -53,7 +53,7 @@ module TabTab::Definition
     end
     
     def import_help_flags(help_flag)
-      help_flag ||= "--help"
+      help_flag = "--help" unless help_flag.is_a?(String)
       imported_flags = TabTab::Completions::External.new(app_name, help_flag).extract
       imported_flags.each do |flag|
         flag.gsub!(/^-*/, '')

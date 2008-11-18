@@ -1,14 +1,4 @@
-TabTab::Definition.register('rails') do |c|
-  c.flags :freeze, :f
-  c.flags :version, :v
-  c.flags :help, :h
-  c.flags :pretend, :p
-  c.flags :force
-  c.flags :skip, :s
-  c.flags :quiet, :q
-  c.flags :backtrace, :t
-  c.flags :svn, :c
-  c.flags :git, :g
+TabTab::Definition.register('rails', :import => true) do |c|
   c.flags :database, :d do
     "mysql/oracle/postgresql/sqlite2/sqlite3/frontbase".split('/')
   end
