@@ -32,7 +32,7 @@ end
 
 Then %r{^external completions are ready to be installed for applications: (.*)$} do |app_list|
   in_home_folder do
-    contents = File.read(".tabtab.sh")
+    contents = File.read(".tabtab.bash")
     app_list.split(/,\s*/).each do |app|
       contents.should =~ /complete -o default -C 'tabtab --external' #{app}/
     end
@@ -41,7 +41,7 @@ end
 
 Then %r{^gem completions are ready to be installed for applications (.*) in gem (.*)$} do |app_list, gem_name|
   in_home_folder do
-    contents = File.read(".tabtab.sh")
+    contents = File.read(".tabtab.bash")
     app_list.split(/,\s*/).each do |app|
       contents.should =~ /complete -o default -C 'tabtab --gem #{gem_name}' #{app}/
     end
@@ -50,7 +50,7 @@ end
 
 Then %r{^file completions are ready to be installed for applications (.*) in file (.*)$} do |app_list, file_name|
   in_home_folder do
-    contents = File.read(".tabtab.sh")
+    contents = File.read(".tabtab.bash")
     app_list.split(/,\s*/).each do |app|
       contents.should =~ /complete -o default -C 'tabtab --file #{file_name}' #{app}/
     end

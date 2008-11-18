@@ -7,7 +7,7 @@ Feature: Discover completions config script in installed RubyGems
     Given a user's RubyGems gem cache
     And a RubyGem 'my_app' with executable 'test_app' with autocompletions
     When run local executable 'install_tabtab' with arguments ''
-    Then home file '.tabtab.sh' is created
+    Then home file '.tabtab.bash' is created
     Then gem completions are ready to be installed for applications test_app in gem my_app
   
   Scenario: Activate auto-completions for gem-based app, determine options and return all

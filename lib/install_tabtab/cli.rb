@@ -17,7 +17,7 @@ module InstallTabTab
       install_externals
       install_for_files
       install_from_gems
-      @file = File.open(File.join(home, ".tabtab.sh"), "w")
+      @file = File.open(File.join(home, ".tabtab.bash"), "w")
       @to_file.each { |line| @file << "#{line}\n" }
       @file.close
     end

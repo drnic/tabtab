@@ -16,7 +16,7 @@ Currently, I haven't finished the installer to set this stuff up for you. When
 the project is released, it will have a simple-to-use installer. It will be 
 sex-on-a-stick.
 
-For now, you need to have your own, hand crafted ~/.tabtab.sh file, and run it from your 
+For now, you need to have your own, hand crafted ~/.tabtab.bash file, and run it from your 
 .profile.
 
 Here is a sample:
@@ -37,7 +37,7 @@ Run `install_tabtab`
 
 In your .profile (currently for bash, but zsh etc coming soon/need help) add:
 
-    source ~/.tabtab.sh
+    source ~/.tabtab.bash
 
 == REQUIREMENTS:
 

@@ -6,7 +6,7 @@ describe InstallTabTab::CLI, "with --external app flag" do
     ENV['HOME'] = '/tmp/some/home'
     @cli = InstallTabTab::CLI.new
     @cli.expects(:config).returns({"external" => {"-h" => %w[test_app]}}).at_least(2)
-    File.expects(:open).with('/tmp/some/home/.tabtab.sh', 'w').returns(mock do
+    File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
       expects(:<<).with("complete -o default -C 'tabtab --external' test_app\n")
       expects(:close)
     end)
@@ -17,7 +17,7 @@ describe InstallTabTab::CLI, "with --external app flag" do
     @stdout = @stdout_io.read
   end
   
-  it "should create a home file .tabtab.sh" do
+  it "should create a home file .tabtab.bash" do
     # verify mocks
   end
 
@@ -39,7 +39,7 @@ describe InstallTabTab::CLI, "with --gem GEM_NAME app flag" do
       c.flags :extra, :x
     end
     EOS
-    File.expects(:open).with('/tmp/some/home/.tabtab.sh', 'w').returns(mock do
+    File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
       expects(:<<).with("complete -o default -C 'tabtab --gem gem_with_tabtabs' tabtabbed_app\n")
       expects(:<<).with("complete -o default -C 'tabtab --gem gem_with_tabtabs' another_app\n")
       expects(:close)
@@ -50,7 +50,7 @@ describe InstallTabTab::CLI, "with --gem GEM_NAME app flag" do
     @stdout = @stdout_io.read
   end
   
-  it "should create a home file .tabtab.sh" do
+  it "should create a home file .tabtab.bash" do
     # verify mocks
   end
 
@@ -62,7 +62,7 @@ describe InstallTabTab::CLI, "with --file FILE_NAME app flag" do
     @cli = InstallTabTab::CLI.new
     @cli.expects(:config).returns({'file' => {'/path/to/definition.rb' => 'some_app'}}).at_least(2)
     Gem.expects(:all_load_paths).returns([])
-    File.expects(:open).with('/tmp/some/home/.tabtab.sh', 'w').returns(mock do
+    File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
       expects(:<<).with("complete -o default -C 'tabtab --file /path/to/definition.rb' some_app\n")
       expects(:close)
     end)
@@ -72,7 +72,7 @@ describe InstallTabTab::CLI, "with --file FILE_NAME app flag" do
     @stdout = @stdout_io.read
   end
   
-  it "should create a home file .tabtab.sh" do
+  it "should create a home file .tabtab.bash" do
     # verify mocks
   end
 

@@ -6,7 +6,7 @@ Feature: Autocompletions for app via an explicit definition file
   Scenario: Add completions within explicit files
     Given a .tabtab.yml config file
     When run local executable 'install_tabtab' with arguments ''
-    Then home file '.tabtab.sh' is created
+    Then home file '.tabtab.bash' is created
     Then file completions are ready to be installed for applications test_app in file /path/to/file.rb
   
   Scenario: Trigger autocompletions where the definition is in a specific file
