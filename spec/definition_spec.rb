@@ -26,7 +26,7 @@ end
 
 describe TabTab::Definition, "register a complete definition" do
   before(:each) do
-    TabTab::Definition::Root.expects(:named).with('someapp').returns(mock)
+    TabTab::Definition::Root.expects(:named).with('someapp', {}).returns(mock)
     TabTab::Definition.register('someapp')
   end
 
