@@ -47,7 +47,8 @@ end
 
 describe TabTab::Definition::Root, "can pre-load flags from target's --help output using { :import => '--help' } option" do
   before(:each) do
-    @definitions = TabTab::Definition::Root.named('myapp', :import => '--help') do |c|
+    app_name = File.dirname(__FILE__) + "/fixtures/gems/my_app/bin/test_app"
+    @definitions = TabTab::Definition::Root.named(app_name, :import => '--help') do |c|
       c.command :new_command
       c.command :extra do
         %w[this command overrides default --extra flag from output]

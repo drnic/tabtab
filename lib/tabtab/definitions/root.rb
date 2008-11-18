@@ -9,6 +9,7 @@ module TabTab::Definition
     def initialize(app_name, options = {}, &block)
       @app_name = app_name
       super(nil, &block)
+      import_help_flags(options[:import]) if options[:import]
     end
     
     def extract_completions(previous_token, current_token)
@@ -49,6 +50,14 @@ module TabTab::Definition
     # Determines if current token matches the app name
     def matches_token?(cmd_line_token)
       cmd_line_token == app_name
+    end
+    
+    def import_help_flags(help_flag)
+      help_flag ||= "--help"
+      imported_flags = TabTab::Completions::External.new(app_name, help_flag).extract
+      imported_flags.each do |flag_name|
+        self.flag(flag_name.gsub(/^-*/, '').to_sym)
+      end
     end
   end
 end
