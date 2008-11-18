@@ -15,7 +15,7 @@ class TabTab::Completions::Gem
     require "rubygems"
     require "tabtab/definitions"
     if definitions_file = load_gem_and_return_definitions_file
-      eval File.read(definitions_file)
+      eval File.read(definitions_file), binding, __FILE__, __LINE__
       TabTab::Definition[app_name].extract_completions(previous_token, current_token)
     else
       []
