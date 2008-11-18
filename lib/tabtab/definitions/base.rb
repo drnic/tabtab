@@ -83,6 +83,9 @@ class TabTab::Definition::Base
     []
   end
   
+  def definition_type?(def_type)
+    self.definition_type == def_type
+  end
   #
   # Test support
   #

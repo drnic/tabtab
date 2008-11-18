@@ -45,6 +45,28 @@ describe TabTab::Definition, "select definition via [app_name]" do
   end
 end
 
+describe TabTab::Definition::Root, "can pre-load flags from target's --help output using { :import => '--help' } option" do
+  before(:each) do
+    @definitions = TabTab::Definition::Root.named('myapp', :import => '--help') do |c|
+      c.command :new_command
+      c.command :extra do
+        %w[this command overrides default --extra flag from output]
+      end
+    end
+  end
+  it "should include -h and --help flags from external apps output" do
+    @definitions['help'].should_not be_nil
+    @definitions['help'].should be_definition_type(:flag)
+    @definitions['h'].should be_definition_type(:flag)
+  end
+  it "should include new_command" do
+    @definitions['new_command'].should be_definition_type(:command)
+  end
+  it "should override --extra default flag as extra command" do
+    @definitions['extra'].should be_definition_type(:command)
+  end
+end
+
 describe TabTab::Definition::Root, "extract_completions" do
   before(:each) do
     setup_definitions

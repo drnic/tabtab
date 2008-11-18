@@ -2,11 +2,11 @@ module TabTab::Definition
   class Root < Base
     attr_reader :app_name, :current_token
 
-    def self.named(app_name, &block)
-      self.new(app_name, &block)
+    def self.named(app_name, options = {}, &block)
+      self.new(app_name, options, &block)
     end
 
-    def initialize(app_name, &block)
+    def initialize(app_name, options = {}, &block)
       @app_name = app_name
       super(nil, &block)
     end

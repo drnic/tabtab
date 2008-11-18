@@ -4,9 +4,9 @@ module TabTab::Definition
   class << self
     attr_reader :registrations
     
-    def register(app_name, &block)
+    def register(app_name, options={}, &block)
       @registrations ||= {}
-      registrations[app_name] = Root.named(app_name, &block)
+      registrations[app_name] = Root.named(app_name, options, &block)
     end
     
     def [](app_name)

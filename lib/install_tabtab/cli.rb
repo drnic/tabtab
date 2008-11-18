@@ -1,6 +1,5 @@
 require 'yaml'
 require 'rubygems'
-require 'tabtab'
 
 # TODO extract into BashCompletion.install ...
 # TODO support non-Bash shells
