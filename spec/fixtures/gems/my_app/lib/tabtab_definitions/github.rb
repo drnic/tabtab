@@ -1,25 +1,17 @@
 TabTab::Definition.register('github') do |c|
+  def users
+    `github info | grep "^ -" | sed -e "s/ - //" | sed -e "s/ .*$//"`.split("\n")
+  end
+  def commits
+    `github network commits 2> /dev/null | sed -e "s/ .*$//"`.split("\n")
+  end
   c.flag :help, :h
-  c.command :fetch, "Fetch from a remote to a local branch."
-  c.command :"pull-request", "Generate the text for a pull request."
+  c.command(:fetch, "Fetch from a remote to a local branch.") { users }
+  c.command(:"pull-request", "Generate the text for a pull request.") { users }
   c.command :browse, "Open this repo in a web browser."
   c.command :pull, "Pull from a remote." do |pull|
-    pull.default do
-      `github network list`
-    end
+    pull.default { users }
     pull.flag :merge
-  end
-  # github pull dchelisky
-  # github pull --merge dchelisky
-  # github pull dchelisky --merge
-  c.command :pull, "Pull from a remote." do |pull|
-    pull.default do
-      `github network list`
-    end
-    pull.flag :merge
-  end
-  c.command :pull, "Pull from a remote." do
-    `github network list`.split(/\n/)
   end
   # github network list
   # github network --cache list
@@ -45,15 +37,13 @@ TabTab::Definition.register('github') do |c|
     clone.flag :ssh
   end
   c.command :home, "Open this repo's master branch in a web browser."
-  c.command :ignore do
-    `github network commits`
-  end
+  c.command(:ignore) { commits }
   c.command :track do |track|
     track.flag :ssh
     track.flag :private
-    track.default { user_list }
+    track.default { users }
   end
   c.command :info         
-  c.command(:fetch_all) { user_list }
+  c.command(:fetch_all) { users }
 end
 
