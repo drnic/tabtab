@@ -24,11 +24,17 @@ module InstallTabTab
    
     def install_externals
       return unless externals = config['external'] || config['externals']
-      for help_arg in externals.keys
-        app_list = externals[help_arg]
-        app_list.each do |app_name|
-          @to_file << "complete -o default -C 'tabtab --external' #{app_name}"
-        end unless app_list.nil?
+      for app_name_or_hash in externals
+        if app_name_or_hash.is_a?(String) || app_name_or_hash.is_a?(Symbol)
+          app_name = app_name_or_hash.to_s
+          @to_file << "complete -o default -C 'tabtab --external#{alias_for(app_name)}' #{app_name}"
+        elsif app_name_or_hash.is_a?(Hash)
+          app_name_or_hash.each do |flag, app_list|
+            app_list.each do |app_name|
+              @to_file << "complete -o default -C 'tabtab --external#{alias_for(app_name)}' #{app_name}"
+            end
+          end
+        end
       end
     end
     
@@ -74,6 +80,10 @@ module InstallTabTab
       EOS
       exit 1
     end
-    
+   
+    def alias_for(user_str)
+      return "" unless aliases = config["alias"] || config["aliases"]
+      aliases[user_str] ? " --alias #{aliases[user_str]}" : ""
+    end
   end
 end

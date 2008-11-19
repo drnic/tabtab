@@ -5,20 +5,40 @@ describe InstallTabTab::CLI, "with --external app flag" do
   before(:each) do
     ENV['HOME'] = '/tmp/some/home'
     @cli = InstallTabTab::CLI.new
-    @cli.expects(:config).returns({"external" => {"-h" => %w[test_app]}}).at_least(2)
+    Gem.expects(:all_load_paths).returns([])
+    @stdout_io = StringIO.new
+  end
+  it "should create a home file .tabtab.bash" do
+    @cli.expects(:config).returns({"external" => %w[test_app]}).at_least(2)
     File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
       expects(:<<).with("complete -o default -C 'tabtab --external' test_app\n")
       expects(:close)
     end)
-    Gem.expects(:all_load_paths).returns([])
-    @stdout_io = StringIO.new
     @cli.execute(@stdout_io, [])
     @stdout_io.rewind
     @stdout = @stdout_io.read
   end
-  
-  it "should create a home file .tabtab.bash" do
-    # verify mocks
+
+  it "should create a home file .tabtab.bash for alternate help flag" do
+    @cli.expects(:config).returns({"external" => [{"-h" => "test_app"}]}).at_least(2)
+    File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
+      expects(:<<).with("complete -o default -C 'tabtab --external' test_app\n")
+      expects(:close)
+    end)
+    @cli.execute(@stdout_io, [])
+    @stdout_io.rewind
+    @stdout = @stdout_io.read
+  end
+
+  it "should create a home file .tabtab.bash for an alias" do
+    @cli.expects(:config).returns({"external" => %w[test], "alias" => { "test" => "test_app" }}).at_least(2)
+    File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
+      expects(:<<).with("complete -o default -C 'tabtab --external --alias test_app' test\n")
+      expects(:close)
+    end)
+    @cli.execute(@stdout_io, [])
+    @stdout_io.rewind
+    @stdout = @stdout_io.read
   end
 
 end
