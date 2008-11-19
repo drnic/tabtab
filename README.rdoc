@@ -156,17 +156,6 @@ I don't ever type 'script/generate', rather I have an alias 'gen' for it.
 TabTab supports user-defined aliases (you might have an alias 'g' for 'script/generate') via its
 ~/.tabtab.yml configuration file. See Aliases section below.
 
-=== Hide small flags
-
-Many applications have command-line flag arguments, such as --port (long) or -p (short). 
-The short form is useful if you are typing them yourself - they are two characters long.
-If you are using auto-completions, it may not be meaningful nor useful to see the
-short form flags.
-
-You can disable short-form versions of flags via the ~/.tabtab.yml config file. Add the following line:
-
-    shortflags: disable
-
 == INSTALL:
 
 * sudo gem install tabtab
@@ -269,12 +258,23 @@ It is as simple as adding an "external" key to your ~/.tabtab.yml config file:
       - curl
       - 
 
+=== Hide small flags
+
+Many applications have command-line flag arguments, such as --port (long) or -p (short). 
+The short form is useful if you are typing them yourself - they are two characters long.
+If you are using auto-completions, it may not be meaningful nor useful to see the
+short form flags.
+
+You can disable short-form versions of flags via the ~/.tabtab.yml config file. Add the following line:
+
+    shortflags: disable
+
 === Aliases: Reusing Completions against local Aliases
 
 TabTab supports user-defined aliases (you might have an alias 'g' for 'script/generate') via its
 ~/.tabtab.yml configuration file. 
 
-Use the  "aliases" key to your ~/.tabtab.yml config file:
+Use the "aliases" key to your ~/.tabtab.yml config file:
 
     aliases:
       gen: script/generate
