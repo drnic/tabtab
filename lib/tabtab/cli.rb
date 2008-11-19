@@ -5,8 +5,9 @@ module TabTab
     include TabTab::LocalConfig
 
     attr_reader :stdout
-    attr_reader :app_type, :full_line
-    attr_reader :global_config
+    attr_reader :full_line
+    attr_reader :arguments, :options, :global_config
+    
 
     def self.execute(stdout, arguments=[])
       self.new.execute(stdout, arguments)
@@ -17,18 +18,38 @@ module TabTab
       # require "shellwords"
       # @full_line = ENV['COMP_LINE']
       # @full_line_argv = Shellwords.shellwords(@full_line)
-      return "" unless @app_type = arguments.shift
+      # cli_arguments, completion_arguments = arguments[0..-4], arguments[-3..-1]
+      @arguments = parse_options(arguments)
       load_global_config
-      case @app_type.gsub(/^-*/, '').to_sym
-      when :external
-        process_external *arguments
-      when :gem
-        process_gem arguments
-      when :file
-        process_file arguments
+      if options[:external]
+        process_external
+      elsif options[:gem]
+        process_gem
+      elsif options[:file]
+        process_file
       else
         usage
       end
+    end
+    
+    def parse_options(arguments)
+      @options = {}
+      OptionParser.new do |opts|
+        opts.banner = "Usage: $0 [options] app_name current_token previous_token"
+    
+        opts.on("--alias", "Map an alias to an actual command with its own tabtab definition") do |v|
+          options[:alias] = v
+        end
+        opts.on("--external", "Automatically import flags from application's -h flags") do
+          options[:external] = true
+        end
+        opts.on("--gem", "Load the tabtab definition from within target RubyGem") do |v|
+          options[:gem] = v
+        end
+        opts.on("--file", "Load the tabtab definition from a specific file") do |v|
+          options[:file] = v
+        end
+      end.parse!(arguments)
     end
     
     #
@@ -36,8 +57,9 @@ module TabTab
     # Generates a completion list from the -h help output of the target application
     #   --external
     #
-    def process_external(app_name, current, previous)
+    def process_external
       usage unless config
+      app_name, current, previous = arguments
       options_flag = externals.find { |flag, app_list| app_list.include?(app_name) }
       options_flag = options_flag.nil? ? '-h' : options_flag.first
       stdout.puts external_options(app_name, options_flag).starts_with(current)
@@ -55,7 +77,7 @@ module TabTab
     # Support for RubyGem-based completion definitions (found in any gem path)
     #   --gem gem_name
     #
-    def process_gem arguments
+    def process_gem
       gem_name, app_name, current_token, previous_token = arguments
       stdout.puts TabTab::Completions::Gem.new(gem_name, app_name, current_token, previous_token, global_config).extract.join("\n")
     end
@@ -64,7 +86,7 @@ module TabTab
     # Support for file-based completion definitions (found in target file)
     #   --file /path/to/definition.rb
     #
-    def process_file arguments
+    def process_file
       file_path, app_name, current_token, previous_token = arguments
       stdout.puts TabTab::Completions::File.new(file_path, app_name, current_token, previous_token, global_config).extract.join("\n")
     end
