@@ -5,7 +5,7 @@ TabTab::Definition.register('rails', :import => true) do |c|
   c.flags :ruby, :r do
     ENV['PATH'].split(":").inject([]) do |mem, path|
       %w[ruby macruby jruby].each do |ruby|
-        ruby = File.join(path, "ruby")
+        ruby = File.join(path, ruby)
         mem << ruby if File.exists?(ruby)
       end
       mem
