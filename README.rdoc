@@ -158,14 +158,12 @@ TabTab supports user-defined aliases (you might have an alias 'g' for 'script/ge
 
 === Hide small flags
 
-IN CURRENT DEVELOPMENT
-
 Many applications have command-line flag arguments, such as --port (long) or -p (short). 
 The short form is useful if you are typing them yourself - they are two characters long.
 If you are using auto-completions, it may not be meaningful nor useful to see the
 short form flags.
 
-You can disable short-form versions of flags via the ~/.tabtab.yml config file:
+You can disable short-form versions of flags via the ~/.tabtab.yml config file. Add the following line:
 
     shortflags: disable
 
