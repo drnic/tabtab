@@ -7,6 +7,7 @@ TabTab::Definition.register('newgem', :import => true) do |c|
     # RubiGen::Base.use_component_sources! [:rubygems, :newgem, :newgem_theme]
     # RubiGen::Scripts::Generate.new.run([])
     # TODO - function to return list of available generators
+    # TODO - make script/generate work for rubigen + rails
     generators = <<-EOS.strip.split(/,[\s\n]*/)
     application_generator, component_generator, executable, extconf,
     install_jruby, install_rspec, install_test_unit, install_website,
