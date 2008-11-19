@@ -147,6 +147,13 @@ The following syntax options for the 'run' command are functionally equivalent:
       c.command(:run) { things_to_run }
     end
 
+=== Application name aliases
+
+I don't ever type 'script/generate', rather I have an alias 'gen' for it.
+
+TabTab supports user-defined aliases (you might have an alias 'g' for 'script/generate') via its
+~/.tabtab.yml configuration file. See Aliases section below.
+
 == INSTALL:
 
 * sudo gem install tabtab
@@ -247,7 +254,20 @@ It is as simple as adding an "external" key to your ~/.tabtab.yml config file:
 
     external:
       - curl
-      
+      - 
+
+=== Aliases: Reusing Completions against local Aliases
+
+TabTab supports user-defined aliases (you might have an alias 'g' for 'script/generate') via its
+~/.tabtab.yml configuration file. 
+
+Use the  "aliases" key to your ~/.tabtab.yml config file:
+
+    aliases:
+      gen: script/generate
+      console: script/console
+      ss: script/server
+      server: script/server
 
 == REQUIREMENTS:
 
