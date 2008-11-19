@@ -6,14 +6,17 @@ Rakefile
 bin/install_tabtab
 bin/tabtab
 examples/tabtab.sh
+features/aliases_for_completions.feature
 features/development.feature
 features/different_shells_installation.feature
 features/discovered_gem_app_completions.feature
 features/external_app_completions.feature
 features/file_completions.feature
+features/hide_short_flags.feature
 features/steps/cli.rb
 features/steps/common.rb
 features/steps/completions.rb
+features/steps/configuration.rb
 features/steps/env.rb
 features/steps/gems.rb
 features/steps/shells.rb
@@ -51,6 +54,7 @@ spec/fixtures/gems/my_app/lib/tabtab_definitions/github.rb
 spec/fixtures/gems/my_app/lib/tabtab_definitions/newgem.rb
 spec/fixtures/gems/my_app/lib/tabtab_definitions/rails.rb
 spec/fixtures/gems/my_app/lib/tabtab_definitions/rake.rb
+spec/fixtures/gems/my_app/lib/tabtab_definitions/script-generate.rb
 spec/fixtures/gems/my_app/lib/tabtab_definitions/script-server.rb
 spec/fixtures/gems/my_app/my_app-0.0.1.gem
 spec/fixtures/gems/my_app/my_app.gemspec
