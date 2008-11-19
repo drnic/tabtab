@@ -7,6 +7,7 @@ bin/install_tabtab
 bin/tabtab
 examples/tabtab.sh
 features/development.feature
+features/different_shells_installation.feature
 features/discovered_gem_app_completions.feature
 features/external_app_completions.feature
 features/file_completions.feature
@@ -15,6 +16,7 @@ features/steps/common.rb
 features/steps/completions.rb
 features/steps/env.rb
 features/steps/gems.rb
+features/steps/shells.rb
 lib/install_tabtab/cli.rb
 lib/tabtab.rb
 lib/tabtab/cli.rb
@@ -46,6 +48,7 @@ spec/fixtures/gems/my_app/lib/tabtab_definitions.rb
 spec/fixtures/gems/my_app/lib/tabtab_definitions/cucumber.rb
 spec/fixtures/gems/my_app/lib/tabtab_definitions/gem.rb
 spec/fixtures/gems/my_app/lib/tabtab_definitions/github.rb
+spec/fixtures/gems/my_app/lib/tabtab_definitions/newgem.rb
 spec/fixtures/gems/my_app/lib/tabtab_definitions/rails.rb
 spec/fixtures/gems/my_app/lib/tabtab_definitions/rake.rb
 spec/fixtures/gems/my_app/lib/tabtab_definitions/script-server.rb
