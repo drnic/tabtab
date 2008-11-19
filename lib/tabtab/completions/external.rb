@@ -1,7 +1,10 @@
 class TabTab::Completions::External
-  def initialize(app_name, options_flag = '-h')
+  attr_reader :global_config
+
+  def initialize(app_name, options_flag = '-h', global_config = {})
     @app_name     = app_name
     @options_flag = options_flag
+    @global_config  = global_config
   end
   
   def options_str
@@ -17,8 +20,8 @@ class TabTab::Completions::External
       all_options = lines_containing_options.inject([]) do |list, line|
         list + line.scan(/(?:^\s+|,\s)(-[\w-]+)/).flatten
       end
-      long_options = all_options.grep(/^--/).sort
-      short_options = (all_options - long_options).sort
+      long_options  = all_options.grep(/^--/).sort
+      short_options = hide_short_flags? ? [] : (all_options - long_options).sort
       long_options + short_options
     end
   end
@@ -28,5 +31,9 @@ class TabTab::Completions::External
   # then +starts_with('--')+ returns +['--help', '--extra']+
   def starts_with(prefix)
     extract.grep(/^#{prefix}/)
+  end
+
+  def hide_short_flags?
+    global_config[:shortflags] == 'disable'
   end
 end

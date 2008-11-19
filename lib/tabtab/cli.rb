@@ -6,6 +6,7 @@ module TabTab
 
     attr_reader :stdout
     attr_reader :app_type, :full_line
+    attr_reader :global_config
 
     def self.execute(stdout, arguments=[])
       self.new.execute(stdout, arguments)
@@ -17,6 +18,7 @@ module TabTab
       # @full_line = ENV['COMP_LINE']
       # @full_line_argv = Shellwords.shellwords(@full_line)
       return "" unless @app_type = arguments.shift
+      load_global_config
       case @app_type.gsub(/^-*/, '').to_sym
       when :external
         process_external *arguments
@@ -46,7 +48,7 @@ module TabTab
     end
     
     def external_options(app, options_flag)
-      TabTab::Completions::External.new(app, options_flag)
+      TabTab::Completions::External.new(app, options_flag, global_config)
     end
     
     #
@@ -54,7 +56,8 @@ module TabTab
     #   --gem gem_name
     #
     def process_gem arguments
-      stdout.puts TabTab::Completions::Gem.new(*arguments).extract.join("\n")
+      gem_name, app_name, current_token, previous_token = arguments
+      stdout.puts TabTab::Completions::Gem.new(gem_name, app_name, current_token, previous_token, global_config).extract.join("\n")
     end
     
     #
@@ -62,7 +65,13 @@ module TabTab
     #   --file /path/to/definition.rb
     #
     def process_file arguments
-      stdout.puts TabTab::Completions::File.new(*arguments).extract.join("\n")
+      file_path, app_name, current_token, previous_token = arguments
+      stdout.puts TabTab::Completions::File.new(file_path, app_name, current_token, previous_token, global_config).extract.join("\n")
+    end
+    
+    def load_global_config
+      @global_config ||= {}
+      @global_config[:shortflags] = config["shortflags"] || "enable"
     end
     
     def usage

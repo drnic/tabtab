@@ -12,8 +12,9 @@ module TabTab::Definition
       import_help_flags(options[:import]) if options[:import]
     end
     
-    def extract_completions(previous_token, current_token)
+    def extract_completions(previous_token, current_token, global_config = {})
       @current_token = current_token
+      @global_config = global_config
       current = find_active_definition_for_last_token(previous_token) || self
       current = (current.parent || self) if current.tokens_consumed == 1
       completions = current.filtered_completions(current_token)
@@ -22,7 +23,7 @@ module TabTab::Definition
         if token =~ /^--/
           mem[:long] << token
         elsif token =~ /^-/
-          mem[:short] << token
+          mem[:short] << token unless hide_short_flags?
         else
           mem[:command] << token
         end
@@ -60,6 +61,10 @@ module TabTab::Definition
         next unless flag.size > 0
         self.flag(flag.to_sym)
       end
+    end
+    
+    def hide_short_flags?
+      @global_config[:shortflags] == 'disable'
     end
   end
 end

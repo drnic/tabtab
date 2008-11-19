@@ -1,11 +1,12 @@
 class TabTab::Completions::Gem
-  attr_reader :gem_name, :app_name, :current_token, :previous_token
+  attr_reader :gem_name, :app_name, :current_token, :previous_token, :global_config
   
-  def initialize(gem_name, app_name, current_token, previous_token)
+  def initialize(gem_name, app_name, current_token, previous_token, global_config = {})
     @gem_name       = gem_name
     @app_name       = app_name
     @current_token  = current_token
     @previous_token = previous_token
+    @global_config  = global_config
   end
 
   # Returns the sub-list of all options filtered by a common prefix
@@ -16,7 +17,7 @@ class TabTab::Completions::Gem
     require "tabtab/definitions"
     if definitions_file = load_gem_and_return_definitions_file
       eval File.read(definitions_file), binding, __FILE__, __LINE__
-      TabTab::Definition[app_name].extract_completions(previous_token, current_token)
+      TabTab::Definition[app_name].extract_completions(previous_token, current_token, global_config)
     else
       []
     end
