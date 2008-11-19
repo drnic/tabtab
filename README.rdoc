@@ -118,21 +118,49 @@ defined via 'pull.default {  }' This is an alternate syntax to the earlier value
 and is used where your command can autocomplete to various flags, sub-commands or other 
 from within a generated list of values (via the #default value block).
 
+=== Value block syntax
+
+Value blocks are normal Ruby blocks that return an array of Strings.
+
+The following syntax options for the 'run' command are functionally equivalent:
+
+    TabTab::Definition.register('myapp') do |c|
+      c.command :run do
+        %w[things to run]
+      end
+
+      c.command :run, "A description" do
+        %w[things to run]
+      end
+
+      c.command :run do |run|
+        run.default do
+          %w[things to run]
+        end
+      end
+
+      c.command(:run, "A description") { %w[things to run] }
+
+      def things_to_run
+        $[things to run]
+      end
+      c.command(:run) { things_to_run }
+    end
+
 == INSTALL:
 
 * sudo gem install tabtab
 
 == SETUP:
 
-Create a ~/.tabtab.yml file.
-
-Run `install_tabtab`
+Run `install_tabtab` to install the completions that come built-in with the
+tabtab RubyGem, and within any other RubyGem, at the time of execution.
 
 In your .bash_profile add:
 
     source ~/.tabtab.bash
 
-=== FUTURE SHELLS:
+=== Future shells:
 
 In your .fish_profile add:
 
@@ -141,6 +169,85 @@ In your .fish_profile add:
 In your .ksh_profile add:
 
     source ~/.tabtab.ksh
+
+=== Re-running install_tabtab
+
+You never need to run this command again after new RubyGem updates, but
+you do need to re-run this command each time you:
+
+* install a RubyGem that contains a tabtab_definitions.rb file for the first time
+  (once install_tabtab has discovered the gem it will automatically pick up
+  changes to the definitions in future gem versions)
+* want to add completions defined in a local file, rather than bundled in a gem (see Local Files below)
+* want to add completions for 'external' apps (see External below)
+
+Each time you run install_tabtab the above ~/.tabtab.sh file(s) will be updated. You then need to restart
+your shell(s) to load the new completions, or run the above command explicitly.
+
+=== RubyGems: Completion Definitions in RubyGems
+
+By default, install_tabtab automatically finds any completion definitions bundled in RubyGems.
+The tabtab gem itself includes lots of definitions for applications such as rails, script/server,
+rake, gem, cucumber, github, and others. 
+
+In time, the development and deployment of each
+script may be adopted by the relevant project owners and bundled in their RubyGems rather than
+the tabtab gem itself.
+
+You can bundle tabtab defintions for 1 or more applications in your own RubyGems. Typically,
+you will include tabtab defintions for the applications that you bundle with your gem. For example,
+the global 'rails' app and the per-rails project 'script/server' applications are bundled in the 
+'railties' gem. Rails would ideally include its tabtab definitions in this railties gem and
+the core Rails team would maintain/update the tabtab definition whenever the actual
+applications are updated. This way the application and the tabtab defintions will be consistent.
+
+To include tabtab definitions in a RubyGem, you need to add a 'tabtab_definitions.rb' file
+somewhere in your gem. The suggested location is 'lib/tabtab_definitions.rb'.
+
+=== Local Files: Completion Definitions in Local Files
+
+You can create and develop your own tabtab definitions for your apps or other people's apps.
+Its really simple. Really easy.
+
+1. Create a file
+2. Include the definition code: 
+
+    TabTab::Definition.register('TARGET_APP_NAME') do |c| ... end
+
+3. Create a ~/.tabtab.yml file
+4. Add file configuration:
+
+    files:
+      "/Users/drnic/.tabtab_definitions/TARGET_APP_NAME.rb": TARGET_APP_NAME
+
+You can include multiple definitions in a single file (using multiple 'register(app_name)' calls)
+and including a list of file names:
+
+    files:
+      "/Users/drnic/.tabtab_definitions/my_definitions.rb": curl, mongrel
+
+You can include multiple files for multiple applications:
+
+    files:
+        "/Users/drnic/.tabtab_definitions/curl.rb": curl
+        "/Users/drnic/.tabtab_definitions/mongrel.rb": mongrel
+
+=== External: Completions for Applications without Definitions
+
+As a bonus feature, tabtab supports autocompletions for existing applications
+without requiring a definition file. Neat!
+
+For example, the 'curl' command has lots of flag options. For shits-and-giggles, run 'curl -h'.
+There are currently 56 different flag options. Fifty six!
+
+It would be so sweet to instantly get an autocompletion for these flags without any
+coding effort; no definition file.
+
+It is as simple as adding an "external" key to your ~/.tabtab.yml config file:
+
+    external:
+      - curl
+      
 
 == REQUIREMENTS:
 
