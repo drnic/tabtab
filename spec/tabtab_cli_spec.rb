@@ -21,12 +21,12 @@ describe TabTab::CLI, "--external flag" do
       --help, -h   
       --extra, -x   
     EOS
-    @cli.expects(:config).returns({"external" => {"-h" => %w[test_app]}}).at_least(2)
     @stdout_io = StringIO.new
   end
   
   describe "to generate completion definitions from -h help description" do
     before(:each) do
+      @cli.expects(:config).returns({"external" => %w[test_app]}).at_least(2)
       @cli.execute(@stdout_io, ['--external', 'test_app', '', 'test_app'])
     end
     it_should_print_completions
@@ -34,11 +34,26 @@ describe TabTab::CLI, "--external flag" do
   
   describe "with --alias ALIAS" do
     before(:each) do
+      @cli.expects(:config).returns({"external" => %w[test_app]}).at_least(2)
       @cli.execute(@stdout_io, ['--external', '--alias', 'test_app', 'test', '', 'test'])
     end
     it_should_print_completions
   end
-  
+end
+
+describe TabTab::CLI, "--external flag" do
+  describe "with app_name and explicit -X flag" do
+    before(:each) do
+      @cli = TabTab::CLI.new
+      @stdout_io = StringIO.new
+      TabTab::Completions::External.expects(:new).with("test_app", '-?', {:shortflags=>"enable"}).returns(mock do
+        expects(:starts_with).with("").returns(%w[--extra --help -h -x])
+      end)
+      @cli.expects(:config).returns({"external" => [ {"-?" => %w[test_app] } ] }).at_least(2)
+      @cli.execute(@stdout_io, ['--external', 'test_app', '', 'test_app'])
+    end
+    it_should_print_completions
+  end
 end
 
 describe TabTab::CLI, "--gem flag to local completion definitions in file" do

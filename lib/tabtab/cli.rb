@@ -63,10 +63,16 @@ module TabTab
     #
     def process_external
       usage unless config
-      # TODO - write test to allow value of externals value is an array of app names, and hashes
       # 'externals' => ['app1', 'app2', { '-?' => ['app3'] }]
-      options_flag = externals.find { |flag, app_list| app_list.include?(app_name) }
-      options_flag = options_flag.nil? ? '-h' : options_flag.first
+      # Only look for the internal hashes, and return -? if app_name == 'app3', else nil
+      options_flag = externals.inject(nil) do |o_flag, app_or_hash|
+        next if app_or_hash.is_a?(String) || app_or_hash.is_a?(Symbol)
+        app_or_hash.inject(nil) do |flag, flag_app_list|
+          flag, app_list = flag_app_list
+          flag if app_list.include?(app_name)
+        end
+      end
+      options_flag = options_flag.nil? ? '-h' : options_flag
       stdout.puts TabTab::Completions::External.new(app_name, options_flag, global_config).starts_with(current_token)
     end
     

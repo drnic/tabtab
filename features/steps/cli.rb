@@ -2,10 +2,7 @@ Given %r{^a .tabtab.yml config file} do
   Given "a safe folder"
   in_home_folder do
     config = { 
-      'external' => { 
-        '-h' => %w[rails test_app], 
-        '-?' => [] 
-      },
+      'external' => %w[rails test_app],
       'files' => { 
         '/path/to/file.rb' => 'test_app' 
       }
