@@ -17,10 +17,10 @@ end
 describe TabTab::CLI, "--external flag" do
   before(:each) do
     @cli = TabTab::CLI.new
-    @options = mock do
-      expects(:starts_with).with('').returns(['--extra', '--help', '-h', '-x'])
-    end
-    @cli.expects(:external_options).with('test_app', '-h').returns(@options)
+    TabTab::Completions::External.any_instance.expects(:options_str).returns(<<-EOS.gsub(/^    /, ''))
+      --help, -h   
+      --extra, -x   
+    EOS
     @cli.expects(:config).returns({"external" => {"-h" => %w[test_app]}}).at_least(2)
     @stdout_io = StringIO.new
   end
