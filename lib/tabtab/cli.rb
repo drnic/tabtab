@@ -6,7 +6,8 @@ module TabTab
 
     attr_reader :stdout
     attr_reader :full_line
-    attr_reader :arguments, :options, :global_config
+    attr_reader :options, :global_config
+    attr_reader :current_token, :previous_token
     
 
     def self.execute(stdout, arguments=[])
@@ -18,8 +19,7 @@ module TabTab
       # require "shellwords"
       # @full_line = ENV['COMP_LINE']
       # @full_line_argv = Shellwords.shellwords(@full_line)
-      # cli_arguments, completion_arguments = arguments[0..-4], arguments[-3..-1]
-      @arguments = parse_options(arguments)
+      @app_name, @current_token, @previous_token = parse_options(arguments)
       load_global_config
       if options[:external]
         process_external
@@ -37,19 +37,23 @@ module TabTab
       OptionParser.new do |opts|
         opts.banner = "Usage: $0 [options] app_name current_token previous_token"
     
-        opts.on("--alias", "Map an alias to an actual command with its own tabtab definition") do |v|
+        opts.on("--alias ALIAS", "Map an alias to an actual command with its own tabtab definition") do |v|
           options[:alias] = v
         end
-        opts.on("--external", "Automatically import flags from application's -h flags") do
-          options[:external] = true
+        opts.on("--external", "Automatically import flags from application's -h flags") do |v|
+          options[:external] = v
         end
-        opts.on("--gem", "Load the tabtab definition from within target RubyGem") do |v|
+        opts.on("--gem GEM_NAME", "Load the tabtab definition from within target RubyGem") do |v|
           options[:gem] = v
         end
-        opts.on("--file", "Load the tabtab definition from a specific file") do |v|
+        opts.on("--file FILE_NAME", "Load the tabtab definition from a specific file") do |v|
           options[:file] = v
         end
       end.parse!(arguments)
+    end
+    
+    def app_name
+      options[:alias] || @app_name
     end
     
     #
@@ -59,18 +63,15 @@ module TabTab
     #
     def process_external
       usage unless config
-      app_name, current, previous = arguments
+      # TODO - write test to allow value of externals value is an array of app names, and hashes
+      # 'externals' => ['app1', 'app2', { '-?' => ['app3'] }]
       options_flag = externals.find { |flag, app_list| app_list.include?(app_name) }
       options_flag = options_flag.nil? ? '-h' : options_flag.first
-      stdout.puts external_options(app_name, options_flag).starts_with(current)
+      stdout.puts TabTab::Completions::External.new(app_name, options_flag, global_config).starts_with(current_token)
     end
     
     def externals
       config["external"] || config["externals"]
-    end
-    
-    def external_options(app, options_flag)
-      TabTab::Completions::External.new(app, options_flag, global_config)
     end
     
     #
@@ -78,8 +79,7 @@ module TabTab
     #   --gem gem_name
     #
     def process_gem
-      gem_name, app_name, current_token, previous_token = arguments
-      stdout.puts TabTab::Completions::Gem.new(gem_name, app_name, current_token, previous_token, global_config).extract.join("\n")
+      stdout.puts TabTab::Completions::Gem.new(options[:gem], app_name, current_token, previous_token, global_config).extract.join("\n")
     end
     
     #
@@ -87,8 +87,7 @@ module TabTab
     #   --file /path/to/definition.rb
     #
     def process_file
-      file_path, app_name, current_token, previous_token = arguments
-      stdout.puts TabTab::Completions::File.new(file_path, app_name, current_token, previous_token, global_config).extract.join("\n")
+      stdout.puts TabTab::Completions::File.new(options[:file], app_name, current_token, previous_token, global_config).extract.join("\n")
     end
     
     def load_global_config
