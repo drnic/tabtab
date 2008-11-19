@@ -27,11 +27,13 @@ module InstallTabTab
       for app_name_or_hash in externals
         if app_name_or_hash.is_a?(String) || app_name_or_hash.is_a?(Symbol)
           app_name = app_name_or_hash.to_s
-          @to_file << "complete -o default -C 'tabtab --external#{alias_for(app_name)}' #{app_name}"
+          tabtab = tabtab_cmd('--external', app_name)
+          @to_file << "complete -o default -C '#{tabtab}' #{app_name}"
         elsif app_name_or_hash.is_a?(Hash)
           app_name_or_hash.each do |flag, app_list|
             app_list.each do |app_name|
-              @to_file << "complete -o default -C 'tabtab --external#{alias_for(app_name)}' #{app_name}"
+              tabtab = tabtab_cmd('--external', app_name)
+              @to_file << "complete -o default -C '#{tabtab}' #{app_name}"
             end
           end
         end
@@ -51,13 +53,15 @@ module InstallTabTab
     end
     
     def install_file(file, app_name)
-      @to_file << "complete -o default -C 'tabtab --file #{File.expand_path(file)}' #{app_name}"
+      tabtab = tabtab_cmd("--file #{File.expand_path(file)}", app_name)
+      @to_file << "complete -o default -C '#{tabtab}' #{app_name}"
     end
     
     def install_from_gems
       find_gems_with_definition_files.each do |gem|
         gem[:app_names].each do |app_name|
-          @to_file << "complete -o default -C 'tabtab --gem #{gem[:gem_name]}' #{app_name}"
+          tabtab = tabtab_cmd("--gem #{gem[:gem_name]}", app_name)
+          @to_file << "complete -o default -C '#{tabtab}' #{app_name}"
         end
       end
     end
@@ -81,6 +85,10 @@ module InstallTabTab
       exit 1
     end
    
+    def tabtab_cmd(flags, user_str)
+      "tabtab #{flags}#{alias_for(user_str)}"
+    end
+    
     def alias_for(user_str)
       return "" unless aliases = config["alias"] || config["aliases"]
       aliases[user_str] ? " --alias #{aliases[user_str]}" : ""
