@@ -32,9 +32,11 @@ within all Ruby on Rails applications:
 
     TabTab::Definition.register('script/server') do |c|
       c.flag :debugger, :d
+      
       c.flag :environment, :e do
         Dir['config/environments/*.rb'].map { |env| env.gsub(/^.*environments\//,'').gsub(/.rb$/,'') }
       end
+      
       # script/server -p TABTAB -> generated first available port 3000, 3001, 3002
       c.flag :port, :p do
         port = 3000
@@ -86,11 +88,14 @@ including the user values for the 'github pull' and 'github network web' command
       def users
         `github info | grep "^ -" | sed -e "s/ - //" | sed -e "s/ .*$//"`.split("\n")
       end
+      
       c.command :info, "Show info"
+      
       c.command :pull, "Pull from a remote." do |pull|
         pull.default { users }
         pull.flag :merge
       end
+      
       c.command :network, "Project network tools" do |network|
         network.command(:web) { user_list }
         network.command :commits
