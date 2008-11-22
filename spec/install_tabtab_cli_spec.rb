@@ -1,6 +1,25 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 require 'install_tabtab/cli'
 
+describe InstallTabTab::CLI, "with --development CLI flag" do
+  before(:each) do
+    ENV['HOME'] = '/tmp/some/home'
+    dev_bin = File.expand_path(File.dirname(__FILE__) + "/../bin/tabtab")
+    @cli = InstallTabTab::CLI.new
+    Gem.expects(:all_load_paths).returns([])
+    @cli.expects(:config).returns({"external" => %w[test_app]}).at_least(2)
+    File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
+      expects(:<<).with("complete -o default -C '#{dev_bin} --external' test_app\n")
+      expects(:close)
+    end)
+    @stdout_io = StringIO.new
+  end
+  
+  it "should point to local dev bin/tabtab instead of global tabtab CLI" do
+    @cli.execute(@stdout_io, ['--development'])
+  end
+end
+
 describe InstallTabTab::CLI, "with --external app flag" do
   before(:each) do
     ENV['HOME'] = '/tmp/some/home'
@@ -8,6 +27,7 @@ describe InstallTabTab::CLI, "with --external app flag" do
     Gem.expects(:all_load_paths).returns([])
     @stdout_io = StringIO.new
   end
+  
   it "should create a home file .tabtab.bash" do
     @cli.expects(:config).returns({"external" => %w[test_app]}).at_least(2)
     File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do

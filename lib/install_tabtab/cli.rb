@@ -1,3 +1,4 @@
+require 'optparse'
 require 'yaml'
 require 'rubygems'
 
@@ -7,12 +8,15 @@ module InstallTabTab
   class CLI
     include TabTab::LocalConfig
     
+    attr_reader :options
+    attr_reader :development_cli
+    
     def self.execute(stdout, arguments=[])
       self.new.execute(stdout, arguments)
     end
     
     def execute(stdout, arguments=[])
-      usage unless config
+      parse_options(arguments)
       @to_file = []
       install_externals
       install_for_files
@@ -20,6 +24,17 @@ module InstallTabTab
       @file = File.open(File.join(home, ".tabtab.bash"), "w")
       @to_file.each { |line| @file << "#{line}\n" }
       @file.close
+    end
+   
+    def parse_options(arguments)
+      @options = {}
+      OptionParser.new do |opts|
+        opts.banner = "Usage: $0 [options]"
+    
+        opts.on("-d", "--development", "Generate .tabtab.bash to use local bin/tabtab instead of RubyGems tabtab") do |v|
+          options[:development_cli] = v
+        end
+      end.parse!(arguments)
     end
    
     def install_externals
@@ -86,7 +101,8 @@ module InstallTabTab
     end
    
     def tabtab_cmd(flags, user_str)
-      "tabtab #{flags}#{alias_for(user_str)}"
+      tabtab = options[:development_cli] ? File.expand_path(File.dirname(__FILE__) + "/../../bin/tabtab") : "tabtab"
+      "#{tabtab} #{flags}#{alias_for(user_str)}"
     end
     
     def alias_for(user_str)
