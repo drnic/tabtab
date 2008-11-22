@@ -16,6 +16,7 @@ module InstallTabTab
     end
     
     def execute(stdout, arguments=[])
+      $stdout = stdout
       parse_options(arguments)
       @to_file = []
       install_externals
@@ -71,6 +72,7 @@ module InstallTabTab
     def install_from_gems
       find_gems_with_definition_files.each do |gem|
         gem[:app_names].each do |app_name|
+          $stdout.puts "RubyGem #{gem[:gem_name]} contains TabTab definition for #{app_name}"
           install_cmd_and_aliases(app_name, "--gem #{gem[:gem_name]}")
         end
       end
@@ -78,10 +80,11 @@ module InstallTabTab
     
     def find_gems_with_definition_files
       Gem.all_load_paths.inject([]) do |mem, path|
-        if file = Dir[File.join(path, "**", "tabtab_definitions.rb")].first
+        if file = Dir[File.join(path, "**", "tabtab_definitions.rb")].reject { |path| path =~ /(spec|test)/ }.first
           gem_name = file.match(/\/([^\/]*)-\d+.\d+.\d+\/lib\//)[1]
+          $stdout.puts "RubyGem #{gem_name} contains TabTab definitions"
           TabTab::Definition.clear
-          eval File.read(file)
+          load file
           mem << { :gem_name => gem_name, :app_names => TabTab::Definition.app_names }
         end
         mem

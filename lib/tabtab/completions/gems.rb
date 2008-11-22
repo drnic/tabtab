@@ -16,7 +16,8 @@ class TabTab::Completions::Gem
     require "rubygems"
     require "tabtab/definitions"
     if definitions_file = load_gem_and_return_definitions_file
-      eval File.read(definitions_file), binding, __FILE__, __LINE__
+      load definitions_file
+      # eval File.read(definitions_file), binding, __FILE__, __LINE__
       TabTab::Definition[app_name].extract_completions(previous_token, current_token, global_config)
     else
       []
@@ -24,9 +25,8 @@ class TabTab::Completions::Gem
   end
   
   def load_gem_and_return_definitions_file
-    orig_load_path = $LOAD_PATH.clone
     gem gem_name
-    gem_lib_path = ($LOAD_PATH - orig_load_path).grep(/lib$/).first.gsub(/\/lib$/, '')
+    gem_lib_path = $LOAD_PATH.grep(/#{gem_name}.*\/lib$/).first.gsub(/\/lib$/, '')
     Dir[File.join(gem_lib_path, '**', "tabtab_definitions.rb")].first
   end
 end
