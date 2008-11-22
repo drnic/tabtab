@@ -4,6 +4,8 @@
 
 == DESCRIPTION:
 
+<div style="text-align: right"><img src="http://github.com/drnic/tabtab/tree/master%2Fwebsite%2Fimages%2Ftabtab.png?raw=true" /></div>
+
 Create and install double-tab ('tab tab') auto-completions for any 
 command-line application on any shell (bash, fish, ksh, etc).
 
