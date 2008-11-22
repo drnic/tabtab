@@ -12,11 +12,38 @@ of a command-line application or a target file or folder. Its possible to
 provide your own completions for applications: git comes with bash shell completions,
 and the fish shell includes a library of completions for many applications.
 
+== QUICK START/TRIAL ME:
+
+The tabtab gem comes with some pre-defined completions for some popular applications
+that benefit from completions: rails, newgem, cucumber, github (and its alias gh).
+It takes 2 minutes to trial this project and see if you like it:
+
+    bash>
+    sudo gem install tabtab
+    install_tabtab
+    source ~/.tabtab.bash
+    
+    rails -d TABTAB
+    
+    cd project/hosted/on/github/with/contributors/like/rails/or/rspec
+    github TABTAB
+    gh netTAB feTAB
+    gh netTAB web TABTAB
+
+It just works.
+
+Now, add 'source ~/.tabtab.bash' to your .bash_profile so you have this awesomeness in all your
+terminal shells.
+
+Read on to learn how to write your own auto-completions with only a few lines of Ruby...
+
 == FEATURES/PROBLEMS:
 
 * Completion defintions/recipes are shell agnostic (bash, fish, ksh, etc)
 * Definitions are written in Ruby
-* Can be bundled within RubyGems or explicitly referenced in files
+* Can be bundled within RubyGems, explicitly referenced in local files, or 
+  automatically generated from -h help output from existing applications.
+* Very easy to use: 'install_tabtab' to find available completions, then 'source ~/.tabtab.bash'
 
 == SAMPLE DEFINITION:
 
@@ -242,15 +269,13 @@ You can include multiple files for multiple applications:
 
     files:
         "/Users/drnic/.tabtab_definitions/curl.rb": curl
-        "/Users/drnic/.tabtab_definitions/mongrel.rb": mongrel
+        "/Users/drnic/.tabtab_definitions/mongrel.rb": mongrel_rails
 
 === External: Completions for Applications without Definitions
 
 As a bonus feature, tabtab supports autocompletions for existing applications
-without requiring a definition file. Neat!
-
-For example, the 'curl' command has lots of flag options. For shits-and-giggles, run 'curl -h'.
-There are currently 56 different flag options. Fifty six!
+without requiring a definition file. Neat! For example, the 'curl' command has lots of flag options. 
+For shits-and-giggles, run 'curl -h'. There are currently 56 different flag options. Fifty six!
 
 It would be so sweet to instantly get an autocompletion for these flags without any
 coding effort; no definition file.
@@ -259,7 +284,7 @@ It is as simple as adding an "external" key to your ~/.tabtab.yml config file:
 
     external:
       - curl
-      - 
+      - cap
 
 === Hide small flags
 
