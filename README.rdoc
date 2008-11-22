@@ -263,7 +263,7 @@ You can include multiple definitions in a single file (using multiple 'register(
 and including a list of file names:
 
     files:
-      "/Users/drnic/.tabtab_definitions/my_definitions.rb": curl, mongrel
+      "/Users/drnic/.tabtab_definitions/my_definitions.rb": curl, mongrel_rails
 
 You can include multiple files for multiple applications:
 
