@@ -45,6 +45,13 @@ Then %r{^gem completions are ready to be installed for applications (.*) in gem 
   end
 end
 
+Then %r{^gem completions are ready to be installed for application (.*) in gem (.*) in file (.*)$} do |app_name, gem_name, path|
+  in_home_folder do
+    contents = File.read(".tabtab.bash")
+    contents.should =~ %r{complete -o default -C 'tabtab --gem #{gem_name}/#{path}' #{app}}
+  end
+end
+
 Then %r{^file completions are ready to be installed for applications (.*) in file (.*)$} do |app_list, file_name|
   in_home_folder do
     contents = File.read(".tabtab.bash")

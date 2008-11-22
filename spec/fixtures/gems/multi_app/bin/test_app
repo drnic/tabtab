@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+if ARGV.include?('-h') || ARGV.include?('--help')
+  puts <<-EOS
+  Options:
+     -h, --help         Shows this help
+     -x, --extra        Does extra stuff
+  EOS
+else
+  puts "This is a friendly app. Use -h or --help to see options"
+end

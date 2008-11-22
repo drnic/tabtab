@@ -7,7 +7,7 @@ def gem_install_dir
   install_dir = File.expand_path(File.join(@home_path), ".gem/ruby/1.8")
 end
 
-Given /^a RubyGem '(.*)' with executable '(.*)' with autocompletions$/ do |gem_name, executable|
+Given /^a RubyGem '(.*)' with autocompletions$/ do |gem_name|
   @stdout = File.expand_path(File.join(@tmp_root, "geminstall.txt"))
   @stderr = File.expand_path(File.join(@tmp_root, "geminstall.err"))
   FileUtils.chdir(File.join(File.dirname(__FILE__) + "/../../spec/fixtures/gems/#{gem_name}")) do
