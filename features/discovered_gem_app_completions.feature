@@ -32,6 +32,6 @@ Feature: Discover completions config script in installed RubyGems
   Scenario: Activate many auto-completions for gem-based app within tabtab_definitions folder
     Given a user's RubyGems gem cache
     And a RubyGem 'multi_app' with autocompletions
-    When run local executable 'tabtab' with arguments '--gem multi_app/lib/tabtab_definitions/test_app.rb test_app "" test_app'
+    When run local executable 'tabtab' with arguments '--gem multi_app/lib/tabtab_definitions/some_app.rb test_app "" test_app'
     Then I should see a full list of options for 'test_app'
 

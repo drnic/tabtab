@@ -88,7 +88,8 @@ end
 describe TabTab::CLI, "--gem GEM_NAME/PATH loads from a PATH within a gem to find definition" do
   before(:each) do
     @cli = TabTab::CLI.new
-    TabTab::Completions::Gem.any_instance.expects(:load_gem_and_return_definitions_file).returns('/path/to/my_gem-1.0.0/lib/tabtab_definitions/definition.rb')
+    TabTab::Completions::Gem.any_instance.expects(:load_gem_and_return_definitions_file).never
+    TabTab::Completions::Gem.any_instance.expects(:gem_root_path).returns('/path/to/my_gem-1.0.0')
     TabTab::Completions::Gem.any_instance.expects(:load).with('/path/to/my_gem-1.0.0/lib/tabtab_definitions/definition.rb').returns(true)
     @cli.expects(:config).returns({}).at_least(1)
     TabTab::Definition.register('test_app') do |c|
