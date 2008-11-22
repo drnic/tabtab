@@ -61,6 +61,18 @@ describe InstallTabTab::CLI, "with --external app flag" do
     @stdout = @stdout_io.read
   end
 
+  it "should create a home file .tabtab.bash for several aliases" do
+    @cli.expects(:config).returns({"external" => %w[test t], "aliases" => { "test" => "test_app", "t" => "test_app" }}).at_least(2)
+    File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
+      expects(:<<).with("complete -o default -C 'tabtab --external --alias test_app' test\n")
+      expects(:<<).with("complete -o default -C 'tabtab --external --alias test_app' t\n")
+      expects(:close)
+    end)
+    @cli.execute(@stdout_io, [])
+    @stdout_io.rewind
+    @stdout = @stdout_io.read
+  end
+
 end
 
 describe InstallTabTab::CLI, "with --gem GEM_NAME app flag" do
