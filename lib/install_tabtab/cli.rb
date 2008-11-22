@@ -29,7 +29,7 @@ module InstallTabTab
     def parse_options(arguments)
       @options = {}
       OptionParser.new do |opts|
-        opts.banner = "Usage: $0 [options]"
+        opts.banner = "Usage: #{$0} [options]"
     
         opts.on("-d", "--development", "Generate .tabtab.bash to use local bin/tabtab instead of RubyGems tabtab") do |v|
           options[:development_cli] = v

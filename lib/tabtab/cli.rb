@@ -36,7 +36,7 @@ module TabTab
     def parse_options(arguments)
       @options = {}
       OptionParser.new do |opts|
-        opts.banner = "Usage: $0 [options] app_name current_token previous_token"
+        opts.banner = "Usage: #{$0} [options] app_name current_token previous_token"
     
         opts.on("--alias ALIAS", "Map an alias to an actual command with its own tabtab definition") do |v|
           options[:alias] = v
