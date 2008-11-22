@@ -19,7 +19,8 @@ module TabTab
       # require "shellwords"
       # @full_line = ENV['COMP_LINE']
       # @full_line_argv = Shellwords.shellwords(@full_line)
-      @app_name, @current_token, @previous_token = parse_options(arguments)
+      @app_name, @current_token, @previous_token = arguments[-3..-1]
+      parse_options(arguments[0..-4])
       load_global_config
       if options[:external]
         process_external
