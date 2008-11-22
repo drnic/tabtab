@@ -149,8 +149,6 @@ The following syntax options for the 'run' command are functionally equivalent:
 
 === Application name aliases
 
-IN CURRENT DEVELOPMENT
-
 I don't ever type 'script/generate', rather I have an alias 'gen' for it.
 
 TabTab supports user-defined aliases (you might have an alias 'g' for 'script/generate') via its
