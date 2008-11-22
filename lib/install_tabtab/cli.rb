@@ -80,12 +80,27 @@ module InstallTabTab
     
     def find_gems_with_definition_files
       Gem.all_load_paths.inject([]) do |mem, path|
-        if file = Dir[File.join(path, "**", "tabtab_definitions.rb")].reject { |path| path =~ /(spec|test)/ }.first
-          gem_name = file.match(/\/([^\/]*)-\d+.\d+.\d+\/lib\//)[1]
-          $stdout.puts "RubyGem #{gem_name} contains TabTab definitions"
+        root = path.gsub(/(lib|bin)$/,'')
+        mem << root unless mem.include?(root)
+        mem
+      end.inject([]) do |mem, path|
+        common_file = Dir[File.join(path, "**", "tabtab_definitions.rb")].reject { |tabtab_path| tabtab_path =~ /(spec|test)/ }.first
+        gem_name = nil
+        unless common_file.nil? || common_file.empty?
+          gem_name = common_file.match(/\/([^\/]*)-\d+.\d+.\d+\/lib\//)[1]
           TabTab::Definition.clear
-          load file
+          load common_file
           mem << { :gem_name => gem_name, :app_names => TabTab::Definition.app_names }
+        end
+        files = Dir[File.join(path, "**", "tabtab_definitions", "*.rb")].reject { |tabtab_path| tabtab_path =~ /(spec|test)/ }
+        if files && files.size > 0
+          gem_path, gem_name = files.first.match(/^(.*\/([^\/]*)-\d+.\d+.\d+)/)[1..2]
+          files.each do |file|
+            TabTab::Definition.clear
+            load file
+            tabtab_path = file.gsub(gem_path, "")
+            mem << { :gem_name => "#{gem_name}#{tabtab_path}", :app_names => TabTab::Definition.app_names }
+          end
         end
         mem
       end

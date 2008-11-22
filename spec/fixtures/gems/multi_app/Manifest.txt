@@ -3,4 +3,5 @@ Manifest.txt
 Rakefile
 bin/test_app
 lib/multi_app.rb
-lib/tabtab_definitions/test_app.rb
+lib/tabtab_definitions/some_app.rb
+multi_app.gemspec
