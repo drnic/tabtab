@@ -35,8 +35,6 @@ describe InstallTabTab::CLI, "with --external app flag" do
       expects(:close)
     end)
     @cli.execute(@stdout_io, [])
-    @stdout_io.rewind
-    @stdout = @stdout_io.read
   end
 
   it "should create a home file .tabtab.bash for alternate help flag" do
@@ -46,8 +44,6 @@ describe InstallTabTab::CLI, "with --external app flag" do
       expects(:close)
     end)
     @cli.execute(@stdout_io, [])
-    @stdout_io.rewind
-    @stdout = @stdout_io.read
   end
 
   it "should create a home file .tabtab.bash for an alias" do
@@ -57,8 +53,6 @@ describe InstallTabTab::CLI, "with --external app flag" do
       expects(:close)
     end)
     @cli.execute(@stdout_io, [])
-    @stdout_io.rewind
-    @stdout = @stdout_io.read
   end
 
   it "should create a home file .tabtab.bash for several aliases" do
@@ -69,8 +63,6 @@ describe InstallTabTab::CLI, "with --external app flag" do
       expects(:close)
     end)
     @cli.execute(@stdout_io, [])
-    @stdout_io.rewind
-    @stdout = @stdout_io.read
   end
 
 end
@@ -97,13 +89,10 @@ describe InstallTabTab::CLI, "with --gem GEM_NAME app flag" do
       expects(:close)
     end)
     @stdout_io = StringIO.new
-    @cli.execute(@stdout_io, [])
-    @stdout_io.rewind
-    @stdout = @stdout_io.read
   end
   
   it "should create a home file .tabtab.bash" do
-    # verify mocks
+    @cli.execute(@stdout_io, [])
   end
 
 end
@@ -119,13 +108,10 @@ describe InstallTabTab::CLI, "with --file FILE_NAME app flag" do
       expects(:close)
     end)
     @stdout_io = StringIO.new
-    @cli.execute(@stdout_io, [])
-    @stdout_io.rewind
-    @stdout = @stdout_io.read
   end
   
   it "should create a home file .tabtab.bash" do
-    # verify mocks
+    @cli.execute(@stdout_io, [])
   end
 
 end
