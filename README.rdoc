@@ -97,7 +97,7 @@ including the user values for the 'github pull' and 'github network web' command
       end
       
       c.command :network, "Project network tools" do |network|
-        network.command(:web) { user_list }
+        network.command(:web) { users }
         network.command :commits
       end
     end
