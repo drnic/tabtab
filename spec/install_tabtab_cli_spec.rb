@@ -75,8 +75,8 @@ describe InstallTabTab::CLI, "with --gem GEM_NAME app flag" do
     @cli = InstallTabTab::CLI.new
     @cli.expects(:config).returns({}).at_least(1)
     Gem.expects(:all_load_paths).returns(['/gems/gem_with_tabtabs-1.0.0/lib'])
-    Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/lib/**/tabtab_definitions/**/*.rb').returns([])
-    Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/lib/**/tabtab_definitions.rb').returns(['/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions.rb'])
+    Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/**/tabtab_definitions/**/*.rb').returns([])
+    Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/**/tabtab_definitions.rb').returns(['/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions.rb'])
     @cli.expects(:load).with('/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions.rb').returns(true)
     TabTab::Definition.expects(:app_names).returns(%w[tabtabbed_app another_app])
     File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
@@ -99,8 +99,8 @@ describe InstallTabTab::CLI, "with --gem GEM_NAME/PATH flag" do
     @cli = InstallTabTab::CLI.new
     @cli.expects(:config).returns({}).at_least(1)
     Gem.expects(:all_load_paths).returns(['/gems/gem_with_tabtabs-1.0.0/lib'])
-    Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/lib/**/tabtab_definitions.rb').returns([])
-    Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/lib/**/tabtab_definitions/**/*.rb').returns(['/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions/tabtabbed_app.rb'])
+    Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/**/tabtab_definitions.rb').returns([])
+    Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/**/tabtab_definitions/**/*.rb').returns(['/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions/tabtabbed_app.rb'])
     @cli.expects(:load).with('/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions/tabtabbed_app.rb').returns(true)
     TabTab::Definition.expects(:clear).at_least(1)
     TabTab::Definition.expects(:app_names).returns(%w[tabtabbed_app another_app])
