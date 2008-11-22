@@ -20,6 +20,6 @@ Feature: Discover completions config script in installed RubyGems
     Given a user's RubyGems gem cache
     And a RubyGem 'my_app' with executable 'test_app' with autocompletions
     When run local executable 'tabtab' with arguments '--gem my_app test_app -- test_app'
-    Then I should see a partial list of options for 'test_app' starting with '--'
+    Then I should not see any short form flags
 
 

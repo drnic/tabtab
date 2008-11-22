@@ -17,7 +17,8 @@ Feature: Autocompletions for any 3rd-party application's options
   
   Scenario: Activate auto-completions for app, determine partial options and return all
     Given a .tabtab.yml config file
+    And env variable $PATH includes fixture executables folder
     When run local executable 'tabtab' with arguments '--external test_app -- test_app'
-    Then I should see a partial list of options for 'test_app' starting with '--'
+    Then I should not see any short form flags
 
   

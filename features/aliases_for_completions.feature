@@ -5,10 +5,11 @@ Feature: User can reuse completions for their own aliases
 
   Scenario: Add alias for existing completions
     Given a .tabtab.yml config file
-    And alias 'test' to existing 'test_app'
+    And alias 'test_alias' to existing 'test_app'
     When run local executable 'install_tabtab' with arguments ''
     Then home file '.tabtab.bash' is created
-    And contents of home file '.tabtab.bash' does match /--file /path/to/file.rb --alias test_app test "" test/
+    And contents of home file '.tabtab.bash' does match /test_alias "" test_alias/
+    And contents of home file '.tabtab.bash' does match /--file /path/to/file.rb --alias test_app/
 
   Scenario: An alias maps directly to an app name, that has an existing tabtab definition
     Given an alias 'test' directly to an application 'test_app'

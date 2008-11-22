@@ -19,7 +19,8 @@ TabTab::Definition.register('github') do |c|
   # github network --sort branch --cache list
   # github network --author some@one.com --before 2008-10-08 list
   c.command :network, "Project network tools" do |network|
-    network.command(:web) { user_list }
+    network.command(:web) { users }
+    network.command :fetch
     network.command :list
     network.command :commits
     network.flag :nocache
