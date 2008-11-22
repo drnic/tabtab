@@ -34,6 +34,6 @@ class TabTab::Completions::External
   end
 
   def hide_short_flags?
-    false# global_config[:shortflags] == 'disable'
+    global_config[:shortflags] == 'disable'
   end
 end
