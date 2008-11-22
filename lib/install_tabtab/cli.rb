@@ -41,14 +41,11 @@ module InstallTabTab
       return unless externals = config['external'] || config['externals']
       for app_name_or_hash in externals
         if app_name_or_hash.is_a?(String) || app_name_or_hash.is_a?(Symbol)
-          app_name = app_name_or_hash.to_s
-          tabtab = tabtab_cmd('--external', app_name)
-          @to_file << "complete -o default -C '#{tabtab}' #{app_name}"
+          install_cmd_and_aliases(app_name_or_hash.to_s, "--external")
         elsif app_name_or_hash.is_a?(Hash)
           app_name_or_hash.each do |flag, app_list|
             app_list.each do |app_name|
-              tabtab = tabtab_cmd('--external', app_name)
-              @to_file << "complete -o default -C '#{tabtab}' #{app_name}"
+              install_cmd_and_aliases(app_name, "--external")
             end
           end
         end
@@ -68,15 +65,13 @@ module InstallTabTab
     end
     
     def install_file(file, app_name)
-      tabtab = tabtab_cmd("--file #{File.expand_path(file)}", app_name)
-      @to_file << "complete -o default -C '#{tabtab}' #{app_name}"
+      install_cmd_and_aliases(app_name, "--file #{File.expand_path(file)}")
     end
     
     def install_from_gems
       find_gems_with_definition_files.each do |gem|
         gem[:app_names].each do |app_name|
-          tabtab = tabtab_cmd("--gem #{gem[:gem_name]}", app_name)
-          @to_file << "complete -o default -C '#{tabtab}' #{app_name}"
+          install_cmd_and_aliases(app_name, "--gem #{gem[:gem_name]}")
         end
       end
     end
@@ -92,6 +87,17 @@ module InstallTabTab
         mem
       end
     end
+
+    def install_cmd_and_aliases(app_name, arg_str)
+      tabtab = tabtab_cmd(arg_str)
+      @to_file << "complete -o default -C '#{tabtab}' #{app_name}"
+      aliases.each do |alias_cmd, cmd|
+        if cmd == app_name
+          tabtab = tabtab_cmd(arg_str, cmd)
+          @to_file << "complete -o default -C '#{tabtab}' #{alias_cmd}"
+        end
+      end if aliases
+    end
     
     def usage
       puts <<-EOS.gsub(/^      /, '')
@@ -100,14 +106,16 @@ module InstallTabTab
       exit 1
     end
    
-    def tabtab_cmd(flags, user_str)
+    def tabtab_cmd(flags, aliased_to=nil)
       tabtab = options[:development_cli] ? File.expand_path(File.dirname(__FILE__) + "/../../bin/tabtab") : "tabtab"
-      "#{tabtab} #{flags}#{alias_for(user_str)}"
+      aliased_to ? 
+      "#{tabtab} #{flags} --alias #{aliased_to}" :
+      "#{tabtab} #{flags}"
     end
     
-    def alias_for(user_str)
-      return "" unless aliases = config["alias"] || config["aliases"]
-      aliases[user_str] ? " --alias #{aliases[user_str]}" : ""
+    def aliases
+      config["alias"] || config["aliases"]
     end
+    
   end
 end

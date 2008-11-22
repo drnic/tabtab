@@ -47,8 +47,9 @@ describe InstallTabTab::CLI, "with --external app flag" do
   end
 
   it "should create a home file .tabtab.bash for an alias" do
-    @cli.expects(:config).returns({"external" => %w[test], "alias" => { "test" => "test_app" }}).at_least(2)
+    @cli.expects(:config).returns({"external" => %w[test_app], "alias" => { "test" => "test_app" }}).at_least(2)
     File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
+      expects(:<<).with("complete -o default -C 'tabtab --external' test_app\n")
       expects(:<<).with("complete -o default -C 'tabtab --external --alias test_app' test\n")
       expects(:close)
     end)
@@ -56,8 +57,9 @@ describe InstallTabTab::CLI, "with --external app flag" do
   end
 
   it "should create a home file .tabtab.bash for several aliases" do
-    @cli.expects(:config).returns({"external" => %w[test t], "aliases" => { "test" => "test_app", "t" => "test_app" }}).at_least(2)
+    @cli.expects(:config).returns({"external" => %w[test_app], "aliases" => { "test" => "test_app", "t" => "test_app" }}).at_least(2)
     File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
+      expects(:<<).with("complete -o default -C 'tabtab --external' test_app\n")
       expects(:<<).with("complete -o default -C 'tabtab --external --alias test_app' test\n")
       expects(:<<).with("complete -o default -C 'tabtab --external --alias test_app' t\n")
       expects(:close)
