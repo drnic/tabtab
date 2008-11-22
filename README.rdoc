@@ -282,6 +282,34 @@ Use the "aliases" key to your ~/.tabtab.yml config file:
       ss: script/server
       server: script/server
 
+== SHELL SUPPORT:
+
+TabTab is shell agnostic. If your shell supports auto-completions, then it should be possible
+to hook in the TabTab definitions.
+
+Yet it initially only supports Bash. Why? I know how to hook bash's completion mechanism
+into an external app.
+
+For bash's complete command, the -C option allows me to specify an external command that will
+handle the request for completion options. Below, 'tabtab' is the external completion command and it will
+be used for the github command.
+
+    complete -o default -C tabtab github
+
+For bash, when tabtab is executed, its last 3 arguments are: command name, current token, previous token.
+It also passes the entire current command line via $COMP_LINE.
+
+I know that fish and ksh and other shells have sexy completion support. But I cannot figure out how
+to configure them to delegate to tabtab. 
+
+Fish's complete only seems to allow calls to fish functions, and not external apps. But perhaps
+the fish function can then delegate to tabtab? Perhaps I just need a _tabtab fish function, which
+proxies the request through to the tabtab command?
+
+If you know these things, or are proficient enough in your preferred shell to poke around and help out
+please let me know. I have some cucumber scenarios ready and waiting for your help.
+
+
 == REQUIREMENTS:
 
 Currently, tabtab works with the bash shell, though it is designed to be
