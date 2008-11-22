@@ -1,7 +1,10 @@
 
-For more information on tabtab, see http://tabtab.rubyforge.org
+NOTE: tabtab is currently only operational with the bash shell (see README.rdoc)
 
-NOTE: Change this information in PostInstall.txt 
-You can also delete it if you don't want it.
+To install all included auto-completions and get the sexiness instantly:
 
+* Run 'install_tabtab'
+* Add 'source ~/.tabtab.bash' to your .bash_profile
+* Open a new terminal AND/OR Run 'source ~/.tabtab.bash' in your terminal
 
+To try it out, type 'gem ' and press TAB twice. That is, TabTab. Enjoy.
