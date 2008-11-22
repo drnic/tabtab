@@ -56,17 +56,16 @@ describe TabTab::CLI, "--external flag" do
   end
 end
 
-describe TabTab::CLI, "--gem flag to local completion definitions in file" do
+describe TabTab::CLI, "--gem GEM_NAME loads from tabtab_definitions.rb in gem" do
   before(:each) do
     @cli = TabTab::CLI.new
     TabTab::Completions::Gem.any_instance.expects(:load_gem_and_return_definitions_file).returns('/path/to/definition.rb')
-    File.expects(:read).with('/path/to/definition.rb').returns(<<-EOS.gsub(/^      /,''))
-      TabTab::Definition.register('test_app') do |c|
-        c.flags :help, :h, "help"
-        c.flags :extra, :x
-      end
-    EOS
+    TabTab::Completions::Gem.any_instance.expects(:load).with('/path/to/definition.rb').returns(true)
     @cli.expects(:config).returns({}).at_least(1)
+    TabTab::Definition.register('test_app') do |c|
+      c.flags :help, :h, "help"
+      c.flags :extra, :x
+    end
     @stdout_io = StringIO.new
   end
 
@@ -86,15 +85,43 @@ describe TabTab::CLI, "--gem flag to local completion definitions in file" do
   
 end
 
+describe TabTab::CLI, "--gem GEM_NAME/PATH loads from a PATH within a gem to find definition" do
+  before(:each) do
+    @cli = TabTab::CLI.new
+    TabTab::Completions::Gem.any_instance.expects(:load_gem_and_return_definitions_file).returns('/path/to/my_gem-1.0.0/lib/tabtab_definitions/definition.rb')
+    TabTab::Completions::Gem.any_instance.expects(:load).with('/path/to/my_gem-1.0.0/lib/tabtab_definitions/definition.rb').returns(true)
+    @cli.expects(:config).returns({}).at_least(1)
+    TabTab::Definition.register('test_app') do |c|
+      c.flags :help, :h, "help"
+      c.flags :extra, :x
+    end
+    @stdout_io = StringIO.new
+  end
+
+  describe "to local completion definitions in file" do
+    before(:each) do
+      @cli.execute(@stdout_io, ['--gem', 'my_gem/lib/tabtab_definitions/definition.rb', 'test_app', '', 'test_app'])
+    end
+    it_should_print_completions
+  end
+  
+  describe "with --alias ALIAS" do
+    before(:each) do
+      @cli.execute(@stdout_io, ['--gem', 'my_gem/lib/tabtab_definitions/definition.rb', '--alias', 'test_app', 'test', '', 'test'])
+    end
+    it_should_print_completions
+  end
+  
+end
+
 describe TabTab::CLI, "--file flag" do
   before(:each) do
     @cli = TabTab::CLI.new
-    File.expects(:read).with('/path/to/definition.rb').returns(<<-EOS.gsub(/^      /,''))
-      TabTab::Definition.register('test_app') do |c|
-        c.flags :help, :h, "help"
-        c.flags :extra, :x
-      end
-    EOS
+    TabTab::Completions::File.any_instance.expects(:load).with('/path/to/definition.rb').returns(true)
+    TabTab::Definition.register('test_app') do |c|
+      c.flags :help, :h, "help"
+      c.flags :extra, :x
+    end
     File.expects(:exists?).with('/path/to/definition.rb').returns(true).at_least(1)
     @cli.expects(:config).returns({}).at_least(1)
     @stdout_io = StringIO.new
