@@ -87,14 +87,14 @@ module InstallTabTab
         common_file = Dir[File.join(path, "**", "tabtab_definitions.rb")].reject { |tabtab_path| tabtab_path =~ /(spec|test)/ }.first
         gem_name = nil
         unless common_file.nil? || common_file.empty?
-          gem_name = common_file.match(/\/([^\/]*)-\d+.\d+.\d+\/lib\//)[1]
+          gem_name = common_file.match(/\/([^\/]*)-\d+(\.\d+)+\/lib\//)[1]
           TabTab::Definition.clear
           load common_file
           mem << { :gem_name => gem_name, :app_names => TabTab::Definition.app_names }
         end
         files = Dir[File.join(path, "**", "tabtab_definitions", "**", "*.rb")].reject { |tabtab_path| tabtab_path =~ /(spec|test)/ }
         if files && files.size > 0
-          gem_path, gem_name = files.first.match(/^(.*\/([^\/]*)-\d+.\d+.\d+)/)[1..2]
+          gem_path, gem_name = files.first.match(/^(.*\/([^\/]*)--\d+(\.\d+)+)/)[1..2]
           files.each do |file|
             TabTab::Definition.clear
             load file
