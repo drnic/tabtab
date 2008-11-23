@@ -345,6 +345,60 @@ please let me know. I have some cucumber scenarios ready and waiting for your he
 Currently, tabtab works with the bash shell, though it is designed to be
 shell agnostic.
 
+== KNOWN ISSUES/LIMITATIONS & ARCHITECTURE OVERVIEW:
+
+Pride and ego mean this section goes at the bottom of the readme... this section includes the known
+issues and limitations of TabTab due to current architectural decisions, the aim of being
+shell agnostic whilst initially only implementing TabTab for bash, and DSL challenges in
+attempting to support all possible command-line app APIs with a sexy, small DSL for describing
+auto-completions.
+
+=== Cannot support rake/sake/cap colon-separated completions
+
+This will be fixed soon. I only just discovered this deficiency. 
+
+Auto-completion for rake/sake/cap - when I get it working - will allow you to tab
+through the namespacing across the colons. E.g. 'rake db:test:' and tabtab will show
+all the tasks within this namespace. That's what it should do. That's what all the 
+current implementations of auto-completion do before tabtab. But with tabtab (currently)
+it can't do it. I suck. But here's the reason and the fix.
+
+To fix it requires rewriting the guts of the tabtab application to use $COMP_LINE 
+environment variable instead of the current, previous token. 
+
+Currently tabtab works by passing the current and previous token in the current command
+line string around. But bash isn't coping with colon's correctly. If you tabtab after
+a colon it just ignores the characters before it.
+
+So, I'll abandon the whole mechanism of (current, previous) tokens and use the $COMP_LINE
+variable and manually parse it into tokens via the Shellwords.shellwords function.
+
+=== Nested intelligent lists
+
+Some applications may want to have multiple auto-completed values in a row, with the 2nd value's list
+being dependent upon the value of the first. For example, the 'rubyforge add_release' command takes
+four more arguments: group_id, package_id, release_name, userfile. The first two - group_id and package_id -
+are from known lists of values. The values available for package_id are dependent upon the group_id value.
+This is a nested list, and currently TabTab probably can't do them.
+
+Currently intelligent, dynamic lists of completable values are defined via 'default' blocks - either blocks 
+passed to #flag or #command calls, or via #default calls. I guess to support nested lists you'd need
+nested default blocks. Not sure. 
+
+Or perhaps we need specific syntax to support commands with 2+ arguments.
+
+    TabTab::Definition.register('rubyforge') do |c|
+      c.command(:add_release, 1) { list_of_rubyforge_group_names }
+      c.command(:add_release, 2) { |group_id| list_of_rubyforge_package_names_in(group_id) }
+    end
+   
+In this pseudo code we redefine the :add_release command for each nested argument. The 2nd+ argument
+is passed the completed values from the previous arguments of the command so they
+can filter their lists as appropriate. Might work.
+
+Of course, the second argument (1, 2, ...) would be optional and only required if you were trying
+to describe a nested list of interdependent values.
+
 == SOURCE:
 
 The source for this project is at http://github.com/drnic/tabtab
