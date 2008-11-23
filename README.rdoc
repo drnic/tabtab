@@ -410,10 +410,20 @@ Using git, you can clone the project, run its tests and install it:
     rake
     rake install_gem
 
-== SPONSOR
+== ACKNOWLEDGEMENT and SPONSOR
+
+I wrote most of this at Railscamp #4 in Adelaide, between 13th and 17th of November 2008. Railscamps
+are so awesome. They are a conference without the conference part. Coding, lightning talks, alcohol,
+and guitar hero. Thanks to all the people I demo'd tabtab during its development, for their thoughts
+on the final DSL, and finally for helping give TabTab a name.
+
+After Railscamp, I kept coding tabtab instead of doing proper work. Therefore this project has
+a sponsor:
 
 * Mocra - the premier iPhone/Rails consultancy
 * http://mocra.com
+
+Like TabTab? Don't donate money, just hire us for your next Rails or iPhone party.
 
 == LICENSE:
 
