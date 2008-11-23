@@ -18,6 +18,9 @@ module TabTab::Definition
       if definition_block.arity == -1
         definition_block.call
       elsif definition_block.arity == 1
+        STDERR.puts "outside..."
+        STDERR.puts parent
+        STDERR.puts parent.current_token
         definition_block.call(parent.current_token)
       else
         raise TabTab::Definition::InvalidDefinitionBlockArguments
