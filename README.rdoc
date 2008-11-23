@@ -25,12 +25,14 @@ It takes 2 minutes to trial this project and see if you like it:
     
     rails -d TABTAB
     
+    sudo gem install defunkt-github -s http://gems.github.com
     cd project/hosted/on/github/with/contributors/like/rails/or/rspec
+
     github TABTAB
     gh netTAB feTAB
     gh netTAB web TABTAB
 
-It just works.
+It just works. Flags. Commands. Intelligent values. Aliases. Ooh yeah.
 
 Now, add 'source ~/.tabtab.bash' to your .bash_profile so you have this awesomeness in all your
 terminal shells.

@@ -17,8 +17,12 @@ module TabTab
     def execute(stdout, arguments=[])
       @stdout = stdout
       # require "shellwords"
-      # @full_line = ENV['COMP_LINE']
-      # @full_line_argv = Shellwords.shellwords(@full_line)
+      # line  = ENV['COMP_LINE']
+      # words = Shellwords.shellwords(line)
+      # current = line =~ /\s$/ ? "" : words[-1]
+      # STDERR.puts words.inspect
+      # STDERR.puts words[-1]
+      # STDERR.puts current
       @app_name, @current_token, @previous_token = arguments[-3..-1]
       parse_options(arguments[0..-4])
       load_global_config
