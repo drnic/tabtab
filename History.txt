@@ -1,6 +1,8 @@
 == 1.0.0 2008-11-23 NOT RELEASED YET
 
 * New completions: rubyforge
+* Bugs:
+  * Only install completions from latest version of each gem
 
 == 0.9.0 2008-11-12
 

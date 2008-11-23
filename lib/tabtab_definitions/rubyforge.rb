@@ -19,6 +19,8 @@ TabTab::Definition.register('rubyforge', :import => true) do |c|
     login.flag :username
     login.flag :password
   end
+  # TODO - need nesting of default blocks: rubyforge create_package group_id package_name
+  # This will probably require access to $COMP_LINE
   c.command(:create_package) { groups }
   c.command(:add_release) { groups }
   c.command(:add_file) { groups }

@@ -6,7 +6,7 @@ describe InstallTabTab::CLI, "with --development CLI flag" do
     ENV['HOME'] = '/tmp/some/home'
     dev_bin = File.expand_path(File.dirname(__FILE__) + "/../bin/tabtab")
     @cli = InstallTabTab::CLI.new
-    Gem.expects(:all_load_paths).returns([])
+    Gem.expects(:latest_load_paths).returns([])
     @cli.expects(:config).returns({"external" => %w[test_app]}).at_least(2)
     File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
       expects(:<<).with("complete -o default -C '#{dev_bin} --external' test_app\n")
@@ -24,7 +24,7 @@ describe InstallTabTab::CLI, "with --external app flag" do
   before(:each) do
     ENV['HOME'] = '/tmp/some/home'
     @cli = InstallTabTab::CLI.new
-    Gem.expects(:all_load_paths).returns([])
+    Gem.expects(:latest_load_paths).returns([])
     @stdout_io = StringIO.new
   end
   
@@ -74,7 +74,7 @@ describe InstallTabTab::CLI, "with --gem GEM_NAME app flag" do
     TabTab::Definition.clear
     @cli = InstallTabTab::CLI.new
     @cli.expects(:config).returns({}).at_least(1)
-    Gem.expects(:all_load_paths).returns(['/gems/gem_with_tabtabs-1.0.0/lib'])
+    Gem.expects(:latest_load_paths).returns(['/gems/gem_with_tabtabs-1.0.0/lib'])
     Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/**/tabtab_definitions/**/*.rb').returns([])
     Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/**/tabtab_definitions.rb').returns(['/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions.rb'])
     @cli.expects(:load).with('/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions.rb').returns(true)
@@ -98,7 +98,7 @@ describe InstallTabTab::CLI, "with --gem GEM_NAME/PATH flag" do
     TabTab::Definition.clear
     @cli = InstallTabTab::CLI.new
     @cli.expects(:config).returns({}).at_least(1)
-    Gem.expects(:all_load_paths).returns(['/gems/gem_with_tabtabs-1.0.0/lib'])
+    Gem.expects(:latest_load_paths).returns(['/gems/gem_with_tabtabs-1.0.0/lib'])
     Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/**/tabtab_definitions.rb').returns([])
     Dir.expects(:[]).with('/gems/gem_with_tabtabs-1.0.0/**/tabtab_definitions/**/*.rb').returns(['/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions/tabtabbed_app.rb'])
     @cli.expects(:load).with('/gems/gem_with_tabtabs-1.0.0/lib/tabtab_definitions/tabtabbed_app.rb').returns(true)
@@ -123,7 +123,7 @@ describe InstallTabTab::CLI, "with --file FILE_NAME app flag" do
     ENV['HOME'] = '/tmp/some/home'
     @cli = InstallTabTab::CLI.new
     @cli.expects(:config).returns({'file' => {'/path/to/definition.rb' => 'some_app'}}).at_least(2)
-    Gem.expects(:all_load_paths).returns([])
+    Gem.expects(:latest_load_paths).returns([])
     File.expects(:open).with('/tmp/some/home/.tabtab.bash', 'w').returns(mock do
       expects(:<<).with("complete -o default -C 'tabtab --file /path/to/definition.rb' some_app\n")
       expects(:close)

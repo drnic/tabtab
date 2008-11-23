@@ -79,7 +79,7 @@ module InstallTabTab
     end
     
     def find_gems_with_definition_files
-      Gem.all_load_paths.inject([]) do |mem, path|
+      Gem.latest_load_paths.inject([]) do |mem, path|
         root = path.gsub(/(lib|bin)$/,'')
         mem << root unless mem.include?(root)
         mem
