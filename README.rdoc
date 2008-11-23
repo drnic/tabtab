@@ -12,7 +12,7 @@ of a command-line application or a target file or folder. Its possible to
 provide your own completions for applications: git comes with bash shell completions,
 and the fish shell includes a library of completions for many applications.
 
-== QUICK START/TRIAL ME:
+=== Quick Start/Trial Me:
 
 The tabtab gem comes with some pre-defined completions for some popular applications
 that benefit from completions: rails, newgem, cucumber, github (and its alias gh).
