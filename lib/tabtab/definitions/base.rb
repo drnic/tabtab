@@ -106,7 +106,7 @@ class TabTab::Definition::Base
   def yield_definition_block
     if definition_block.nil?
       return
-    elsif definition_block.arity == -1
+    elsif definition_block.arity == -1 || definition_block.arity == 0
       # these blocks return a result/do lots of work - don't run them now
     elsif definition_block.arity == 1
       definition_block.call self
