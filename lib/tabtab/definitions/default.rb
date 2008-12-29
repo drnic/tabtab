@@ -18,7 +18,7 @@ module TabTab::Definition
       if definition_block.arity == -1 || definition_block.arity == 0
         definition_block.call
       elsif definition_block.arity == 1
-        definition_block.call(parent.current_token)
+        definition_block.call(self)
       else
         raise TabTab::Definition::InvalidDefinitionBlockArguments
       end

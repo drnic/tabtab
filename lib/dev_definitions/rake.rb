@@ -1,22 +1,19 @@
 TabTab::Definition.register('rake', :import => true) do |c|
   def rake_silent_tasks
-    # if File.exists?(dotcache = File.join(File.expand_path('~'), ".raketabs-#{Dir.pwd.hash}"))
-    #   File.read(dotcache)
-    # else
-      tasks = `rake --silent --tasks`
-      # File.open(dotcache, 'w') { |f| f.puts tasks }
-      tasks
-    # end
+    # TODO cache per directory
+    `rake --silent --tasks`
   end
+  # c.cache :rake_silent_tasks, :per => :folder
   
-  c.default do |current|
+  c.default do |cmd|
+    next [] if cmd.current_token.nil? # TODO why are these blocks invoked twice? (1st on setup, 2nd for parsing)
     tasks = (rake_silent_tasks.split("\n")[1..-1] || []).map { |line| line.split[1] }
-    # TODO need to use $COMP_LINE as a colon (e.g. foo:TABTAB) starts a new token, and hides the pre-colon text
-    if current =~ /^([-\w:]+:)/
-      upto_last_colon = $1
-      STDERR.p upto_last_colon
-      tasks = tasks.map { |t| (t =~ /^#{Regexp.escape upto_last_colon}([-\w:]+)$/) ? "#{$1}" : t }
+    if cmd.current_token =~ /^([-\w:]+:)/
+      upto_last_colon = Regexp.escape($1)
+      tasks = tasks.select { |task| /^#{Regexp.escape cmd.current_token}/ =~ task }
+      tasks.map! { |task| task.gsub(/#{Regexp.escape upto_last_colon}/, '')  }
     end
+    STDERR.puts tasks.inspect
     tasks
   end
   c.flags :silence, :s
