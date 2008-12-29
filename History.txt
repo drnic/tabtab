@@ -1,7 +1,8 @@
 == 1.0.0 2008-11-23 NOT RELEASED YET
 
-* New completions: rubyforge
-* Bugs:
+* Uses ENV['COMP_LINE'] for full current line if available
+* New completions: rubyforge, rake
+* Bugs fixed:
   * Only install completions from latest version of each gem
 
 == 0.9.0 2008-11-12
