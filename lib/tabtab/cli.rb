@@ -16,15 +16,7 @@ module TabTab
     
     def execute(stdout, arguments=[])
       @stdout = stdout
-      # require "shellwords"
-      # line  = ENV['COMP_LINE']
-      # words = Shellwords.shellwords(line)
-      # current = line =~ /\s$/ ? "" : words[-1]
-      # STDERR.puts words.inspect
-      # STDERR.puts words[-1]
-      # STDERR.puts current
-      @app_name, @current_token, @previous_token = arguments[-3..-1]
-      parse_options(arguments[0..-4])
+      extract_tokens_and_parse_options(arguments)
       load_global_config
       if options[:external]
         process_external
@@ -34,6 +26,22 @@ module TabTab
         process_file
       else
         usage
+      end
+    end
+    
+    # parses the incoming tokens either via ENV['COMP_LINE'] or tokens from ARGV
+    def extract_tokens_and_parse_options(arguments)
+      if ENV['COMP_LINE']
+        require "shellwords"
+        line  = ENV['COMP_LINE']
+        words = Shellwords.shellwords(line)
+        words << "" if line.split("")[-1] == " "
+        @app_name = words[0]
+        @previous_token, @current_token = words[-2..-1]
+        parse_options(arguments)
+      else
+        @app_name, @current_token, @previous_token = arguments[-3..-1]
+        parse_options(arguments[0..-4])
       end
     end
     

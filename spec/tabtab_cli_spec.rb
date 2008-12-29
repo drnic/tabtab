@@ -143,3 +143,44 @@ describe TabTab::CLI, "--file flag" do
   end
 end
 
+describe TabTab::CLI, "extracting tokens using ENV['COMP_LINE'] via extract_tokens_and_parse_options" do
+  describe "with no tokens" do
+    before(:each) do
+      ENV['COMP_LINE'] = "myapp "
+      @cli = TabTab::CLI.new
+      @cli.extract_tokens_and_parse_options([])
+    end
+
+    it "should setup app_name" do
+      @cli.app_name.should == "myapp"
+    end
+    
+    it "should setup current_token" do
+      @cli.current_token.should == ""
+    end
+    
+    it "should setup previous_token" do
+      @cli.previous_token.should == "myapp"
+    end
+  end
+
+  describe "mid-way through a token" do
+    before(:each) do
+      ENV['COMP_LINE'] = "rake db:"
+      @cli = TabTab::CLI.new
+      @cli.extract_tokens_and_parse_options([])
+    end
+
+    it "should setup app_name" do
+      @cli.app_name.should == "rake"
+    end
+    
+    it "should setup current_token" do
+      @cli.current_token.should == "db:"
+    end
+    
+    it "should setup previous_token" do
+      @cli.previous_token.should == "rake"
+    end
+  end
+end
