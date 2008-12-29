@@ -13,7 +13,6 @@ TabTab::Definition.register('rake', :import => true) do |c|
       tasks = tasks.select { |task| /^#{Regexp.escape cmd.current_token}/ =~ task }
       tasks.map! { |task| task.gsub(/#{Regexp.escape upto_last_colon}/, '')  }
     end
-    STDERR.puts tasks.inspect
     tasks
   end
   c.flags :silence, :s

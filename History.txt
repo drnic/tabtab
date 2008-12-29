@@ -1,4 +1,4 @@
-== 1.0.0 2008-11-23 NOT RELEASED YET
+== 0.91 2008-12-29
 
 * Uses ENV['COMP_LINE'] for full current line if available
 * New completions: rubyforge, rake

@@ -21,7 +21,6 @@ features/steps/env.rb
 features/steps/gems.rb
 features/steps/shells.rb
 lib/dev_definitions/gem.rb
-lib/dev_definitions/rake.rb
 lib/dev_definitions/script-generate.rb
 lib/dev_definitions/script-server.rb
 lib/install_tabtab/cli.rb
@@ -44,6 +43,7 @@ lib/tabtab_definitions/cucumber.rb
 lib/tabtab_definitions/github.rb
 lib/tabtab_definitions/newgem.rb
 lib/tabtab_definitions/rails.rb
+lib/tabtab_definitions/rake.rb
 lib/tabtab_definitions/rubyforge.rb
 script/console
 script/destroy

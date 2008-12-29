@@ -1,4 +1,4 @@
-%w[rubygems rake rake/clean fileutils newgem rubigen].each { |f| require f }
+%w[rubygems rake rake/clean fileutils newgem].each { |f| require f }
 require File.dirname(__FILE__) + '/lib/tabtab'
 
 # Generate all the Rake tasks
