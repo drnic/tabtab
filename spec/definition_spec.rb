@@ -117,7 +117,7 @@ describe TabTab::Definition::Default, "can yield with different number of argume
   
   it "should run default blocks with one arguments and pass current token as argument" do
     tokens = @definitions.extract_completions('one', 'o')
-    tokens.should == ['o', 'one']
+    tokens.should == ['one']
   end
   
 end
