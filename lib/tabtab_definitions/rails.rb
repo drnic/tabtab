@@ -1,4 +1,4 @@
-TabTab::Definition.register('rails', :import => true) do |c|
+TabTab::Definition.register('rails') do |c|
   c.flags :database, :d do
     "mysql/oracle/postgresql/sqlite2/sqlite3/frontbase".split('/')
   end
@@ -11,5 +11,6 @@ TabTab::Definition.register('rails', :import => true) do |c|
       mem
     end
   end
+  c.flags :template, :m
 end
 
