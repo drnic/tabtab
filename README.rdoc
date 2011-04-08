@@ -25,8 +25,7 @@ It takes 2 minutes to trial this project and see if you like it:
     
     rails -d TABTAB
     
-    sudo gem install defunkt-github -s http://gems.github.com
-    cd project/hosted/on/github/with/contributors/like/rails/or/rspec
+    gem install github
 
     github TABTAB
     gh netTAB feTAB
