@@ -1,3 +1,6 @@
+* toolchain using bundler, explicitly gemspec, etc
+* upgrade to latest cucumber/rspec
+
 == 0.9.2 2009-01-19
 
 * more commands for github gem
